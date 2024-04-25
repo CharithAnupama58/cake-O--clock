@@ -2,14 +2,14 @@
 import { useState } from 'react'
 import './App.css'
 import Header from './assets/components/Header'
-import Home from './assets/components/Home'
+import Home from './views/Home'
 // Removed unused import statement
-import Login from './assets/components/Login'
-import StockManagement from './assets/components/stockManagementComponenet'
-import CustomizeCake  from './assets/components/customizeCake'
-import CustomizeCake2  from './assets/components/customizeCake2'
-import PictureUploading  from './assets/components/pictureUploading'
-import PictureUploading2  from './assets/components/pictureUploading2'
+import Login from './views/Login'
+import StockManagement from './views/stockManagementComponenet'
+import CustomizeCake  from './views/customizeCake'
+import CustomizeCake2  from './views/customizeCake2'
+import PictureUploading  from './views/pictureUploading'
+import PictureUploading2  from './views/pictureUploading2'
 import { createBrowserRouter,RouterProvider } from 'react-router-dom'
 
 const router=createBrowserRouter([

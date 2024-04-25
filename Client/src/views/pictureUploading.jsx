@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import arrowLeft from '../images/arrowLeft.png'
-import radiobtn from '../images/Group 127.png'
-import radiobtn1 from '../images/Group 127 (1).png'
-import imageBox from '../images/imageBox.png'
+import arrowLeft from '../assets/images/arrowLeft.png'
+import radiobtn from '../assets/images/Group 127.png'
+import radiobtn1 from '../assets/images/Group 127 (1).png'
+import imageBox from '../assets/images/imageBox.png'
 import { Link,useNavigate } from 'react-router-dom';
 import axios from 'axios';
 

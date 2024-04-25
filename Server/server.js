@@ -15,6 +15,7 @@ import testRoutes from './Routes/Login.js'
 import feedbackRoutes from './Routes/feedback.js'
 import stockManagementRoutes from './Routes/stockManagement.js'
 import customizeCake from './Routes/customizeCake.js'
+import pictureUploading from './Routes/pictureUploading.js'
 import multer from 'multer'
 import path from 'path'
 import { fileURLToPath } from 'url';
@@ -38,6 +39,7 @@ app.use('/server/test', testRoutes);
 app.use('/server/feedback',feedbackRoutes);
 app.use('/server/stockManagement',stockManagementRoutes);
 app.use('/server/customizeCake',customizeCake)
+app.use('/server/pictureUploading',pictureUploading)
 
 
 app.listen(3001, () => {

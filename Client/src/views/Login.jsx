@@ -1,6 +1,6 @@
 import  { useState } from 'react';
-import image7 from '../images/image 7.png'
-import image8 from '../images/_ (1).png'
+import image7 from '../assets/images/image 7.png'
+import image8 from '../assets/images/_ (1).png'
 import { Link,useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
