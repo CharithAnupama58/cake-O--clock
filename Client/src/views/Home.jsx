@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import image2 from '../assets/images/image 3.png';
-import Header from '../assets/components/Header';
+import Header from '../components/Header';
 import image4 from '../assets/images/image 4 (1).png'
 import image5 from '../assets/images/image 5.png'
 import image6 from '../assets/images/image 6.png'

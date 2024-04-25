@@ -1,7 +1,7 @@
 
 import React from 'react';
-import image from '../images/image 2.png';
-import image1 from '../images/Vector.png';
+import image from '../assets/images/image 2.png';
+import image1 from '../assets/images/Vector.png';
 import { Link } from 'react-router-dom';
 
 const Header = () => {

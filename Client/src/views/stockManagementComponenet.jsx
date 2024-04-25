@@ -8,12 +8,12 @@ import image11 from '../assets/images/image 11.png';
 import image13 from '../assets/images/image 13.png';
 import image14 from '../assets/images/images 14.png';
 import { useNavigate } from 'react-router-dom';
-import ShowStock from '../assets/components/showStock';
-import AddStock from '../assets/components/addStock';
-import ReleaseStock from '../assets/components/releaseStock';
-import AddItem from '../assets/components/addItem';
-import DeleteItem from '../assets/components/deleteItem';
-import ExpioryDates from '../assets/components/expioryDates';
+import ShowStock from '../components/showStock';
+import AddStock from '../components/addStock';
+import ReleaseStock from '../components/releaseStock';
+import AddItem from '../components/addItem';
+import DeleteItem from '../components/deleteItem';
+import ExpioryDates from '../components/expioryDates';
 // import axios from 'axios';
 // import jsPDF from 'jspdf';
 // import 'jspdf-autotable'
