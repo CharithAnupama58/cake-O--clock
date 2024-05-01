@@ -18,10 +18,18 @@ const Login = () => {
                 username,
                 password
             });
+            const data=response.data;
+            console.log(data);
 
             if (response.status === 200) {
                 alert('Login successful');
-                navigate('/StockManagement');
+                
+                const { job_role } = data; 
+                if (job_role === 'admin') {
+                    navigate('/StockManagement');
+                } else if (job_role === 'Software Engineer') {
+                    navigate('/FactoryEmployee');
+                }
             } else {
                 // If login fails, display error message
                 alert('Login failed');

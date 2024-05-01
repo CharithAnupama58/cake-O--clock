@@ -6,6 +6,7 @@ import Home from './views/Home'
 // Removed unused import statement
 import Login from './views/Login'
 import StockManagement from './views/stockManagementComponenet'
+import FactoryEmployee from './views/factoryEmployee'
 import CustomizeCake  from './views/customizeCake'
 import CustomizeCake2  from './views/customizeCake2'
 import PictureUploading  from './views/pictureUploading'
@@ -48,6 +49,10 @@ const router=createBrowserRouter([
     path:'/PictureUploading2/:imageUrl',
     element:<PictureUploading2/>
 
+  },
+  {
+    path:'/FactoryEmployee',
+    element:<FactoryEmployee/>
   }
 ])
 

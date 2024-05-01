@@ -66,7 +66,8 @@ export const login=(req,res)=>{
                 return res.status(401).json({ error: 'Invalid username or password' });
             }
             // Login successful
-            res.status(200).json({ message: 'Login successful' });
+            console.log(results[0].job_role);
+            res.status(200).json({ message: 'Login successful' ,job_role: results[0].job_role});
         });
     } catch (error) {
         console.error('Error during login:', error);
