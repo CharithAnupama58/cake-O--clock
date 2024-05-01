@@ -53,7 +53,7 @@ const router=createBrowserRouter([
   {
     path:'/FactoryEmployee',
     element:<FactoryEmployee/>
-  }
+  },
 ])
 
 function App() {

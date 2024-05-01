@@ -7,6 +7,7 @@ import image12 from '../assets/images/image 9.png';
 import image11 from '../assets/images/image 11.png';
 import image13 from '../assets/images/image 13.png';
 import image14 from '../assets/images/images 14.png';
+import CustomizeOrder from '../components/customizeOrder';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -67,37 +68,37 @@ const FactoryEmployee = () => {
     
                     <div className='flex flex-col w-72 justify-center items-center'>
                         <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`} >
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-3 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('showStock')} > 
+                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-3 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('customizeCakeOrder')} > 
                                 <img src={image8} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>Customize Cake Order</h1>   
                             </div>
                         </button>
                         <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl `}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('addStock')}> 
+                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('pictureUploadingCakeOrder')}> 
                                 <img src={image12} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>Picture Uploading</h1>   
                             </div>
                         </button>
                         <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('expioryDates')}> 
+                            <div className='flex w-56 h-12 bg-white items-center justify-around border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('temporaryOrders')}> 
                                 <img src={image14} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>Temporary Orders</h1>   
                             </div>
                         </button>
                         <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`} >
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('releaseStock')}> 
+                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('releaseOrder')}> 
                                 <img src={image10} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>Release Order</h1>   
                             </div>
                         </button>
                         <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('addItem')}> 
+                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('todaysOrder')}> 
                                 <img src={image11} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>Today's Orders</h1>   
                             </div>
                         </button>
                         <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl `} >
-                            <div className='flex w-56 h-12 bg-white items-center justify-around border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('deleteItem')}> 
+                            <div className='flex w-56 h-12 bg-white items-center justify-around border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('cancelOrder')}> 
                                 <img src={image13} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>Cancel Order</h1>   
                             </div>
@@ -109,7 +110,7 @@ const FactoryEmployee = () => {
                     </div>
                 </div>
                 <div className="flex flex-col items-center text-black flex-grow">
-                    
+                    {selectedInterface === 'customizeCakeOrder' && <CustomizeOrder />}
                 </div>
                 
             </div>
