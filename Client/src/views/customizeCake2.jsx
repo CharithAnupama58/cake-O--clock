@@ -13,6 +13,8 @@ export const CustomizeCake = () => {
     const [Contact, setContact] = useState('');
     const [Quantity, setQuantity] = useState('');
     const [PickupDate, setPickupDate] = useState('');
+    const [branchID, setBranchID] = useState('');
+    const sortedOptions = options.slice().sort((a, b) => a.branchName.localeCompare(b.branchName));
     const navigate = useNavigate();
 
     const fetchOptions = async () => {
@@ -34,6 +36,12 @@ export const CustomizeCake = () => {
 
     const handleSelectChange = (event) => {
         setSelectedOption(event.target.value);
+
+        const selectedBranch = options.find(option => option.branchName === event.target.value);
+        if (selectedBranch) {
+            const selectedBranchId = selectedBranch.branchID;
+            setBranchID(selectedBranchId);
+        }
     };
     const handlePickupChange = (event) => {
         setPickupDate(event.target.value);
@@ -51,7 +59,7 @@ export const CustomizeCake = () => {
         e.preventDefault();
         const today = new Date();
         const formattedDate = today.toISOString().split('T')[0];
-        console.log(cakeId,PickupDate,Name,Contact,selectedOption,Quantity,formattedDate,additionalText);
+        console.log(cakeId,PickupDate,Name,Contact,selectedOption,Quantity,formattedDate,additionalText,branchID);
         try {
             const response = await axios.post('http://localhost:3001/server/customizeCake/placeCustomizeOrder', {
                 Name,
@@ -60,7 +68,8 @@ export const CustomizeCake = () => {
                 formattedDate,
                 additionalText,
                 PickupDate,
-                cakeId
+                cakeId,
+                branchID
             });
 
             if (response.status === 200) {
@@ -106,7 +115,7 @@ export const CustomizeCake = () => {
                     <div className='flex flex-row'>
                         <select id="combo-box" className="w-96 mt-14 ml-36 mr-36 h-10 px-3 rounded border-2 border-black" value={selectedOption} onChange={handleSelectChange}>
                                 <option value="">Select a Branch</option>
-                                {options.map((option, index) => (
+                                {sortedOptions.map((option, index) => (
                                     <option key={index}>{option.branchName}</option>
                                 ))}
                         </select>

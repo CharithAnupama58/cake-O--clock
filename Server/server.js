@@ -80,16 +80,16 @@ app.listen(3001, () => {
 // });
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './uploads'); // Uploads will be stored in the 'uploads' folder
+    cb(null, './uploads'); 
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname); // Keep the original file name
+    cb(null, file.originalname); 
   }
 });
 
 const upload = multer({ storage: storage });
 
-// Handle POST request to upload image
+
 app.post('/uploads', upload.single('image'), async (req, res) => {
   const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
     console.log('Uploaded file:', req.file);

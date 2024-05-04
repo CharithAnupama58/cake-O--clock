@@ -85,7 +85,7 @@ export const getCakeDetails = async (req, res) => {
 export const getBranchIds = async (req, res) => {
     try {
         const options = await new Promise((resolve, reject) => {
-            db.query('SELECT branchName FROM Branch', (error, results) => {
+            db.query('SELECT * FROM Branch', (error, results) => {
                 if (error) {
                     reject(error);
                 } else {
@@ -125,19 +125,20 @@ async function generateNewOrderId() {
 }
 
 export const placeCustomizeOrder = async (req, res) => {
-    const { Name, Contact,Quantity,formattedDate,additionalText,PickupDate,cakeId } = req.body;
+    const { Name, Contact,Quantity,formattedDate,additionalText,PickupDate,cakeId,branchID } = req.body;
     const orderId=await generateNewOrderId();
+    const status='Pending';
     console.log(orderId);
     console.log(req.body);
     
 
-    if (!orderId||!Name|| !Contact||!Quantity||!formattedDate||!additionalText||!PickupDate||!cakeId) {
+    if (!orderId||!Name|| !Contact||!Quantity||!formattedDate||!additionalText||!PickupDate||!cakeId||!branchID) {
         return res.status(400).json({ error: 'ItemId, Quantity, and ExpiryDate are required' });
     }
 
     try {
             const InsertResult = await new Promise((resolve, reject) => {
-                db.query('INSERT INTO Orders (orderId, name, contact, quantity, orderDate, cakeText, pickupDate, cakeId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [orderId,Name, Contact,Quantity,formattedDate,additionalText,PickupDate,cakeId], (error, result) => {
+                db.query('INSERT INTO Orders (orderId, name, contact, quantity, orderDate, cakeText, pickupDate, cakeId, status, branchId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [orderId,Name, Contact,Quantity,formattedDate,additionalText,PickupDate,cakeId,status,branchID], (error, result) => {
                     if (error) {
                         reject(error);
                     }

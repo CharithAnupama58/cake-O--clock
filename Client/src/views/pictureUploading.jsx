@@ -29,21 +29,18 @@ export const PictureUploading = () => {
         formData.append('image', file);
 
         try {
-            // Send the image file to the backend for uploading
             const response = await axios.post('http://localhost:3001/uploads', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
 
-            // Handle successful upload
             const url = response.data.imageUrl;
             setImageUrl(url);
             console.log(url);
-            // console.log('Image uploaded successfully:', response.data.imageUrl);
             alert('Image uploaded successfully. Link: ' + response.data.imageUrl);
         } catch (error) {
-            // Handle upload error
+            
             console.error('Error uploading image:', error);
             alert('Error uploading image. Please try again.');
         }

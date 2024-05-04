@@ -16,7 +16,7 @@ const FactoryEmployee = () => {
     const [dateTime, setDateTime] = useState(new Date());
     const [showLogoutPopup, setShowLogoutPopup] = useState(false);
     const navigate = useNavigate();
-    const [selectedInterface, setSelectedInterface] = useState('showStock');
+    const [selectedInterface, setSelectedInterface] = useState('customizeCakeOrder');
 
 
     useEffect(() => {
