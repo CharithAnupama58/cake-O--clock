@@ -18,19 +18,20 @@ async function generateTempOrderId() {
     });
 }
 export const  placePictureUploadingOrder = async (req, res) => {
-    const { Name, Contact,Quantity,formattedDate,additionalText,PickupDate,imageUrl } = req.body;
+    const { Name, Contact,Quantity,formattedDate,additionalText,PickupDate,imageUrl,branchID } = req.body;
     const orderId=await generateTempOrderId();
+    // const status='Pending';
     console.log(orderId);
     console.log(req.body);
     
 
-    if (!orderId||!Name|| !Contact||!Quantity||!formattedDate||!additionalText||!PickupDate||!imageUrl) {
+    if (!orderId||!Name|| !Contact||!Quantity||!formattedDate||!additionalText||!PickupDate||!branchID) {
         return res.status(400).json({ error: 'ItemId, Quantity, and ExpiryDate are required' });
     }
 
     try {
             const InsertResult = await new Promise((resolve, reject) => {
-                db.query('INSERT INTO tempOrders (temporderId, name, contact, quantity, orderDate, cakeText, pickupDate, imgLink) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [orderId,Name, Contact,Quantity,formattedDate,additionalText,PickupDate,imageUrl], (error, result) => {
+                db.query('INSERT INTO tempOrders (temporderId, name, contact, quantity, orderDate, cakeText, pickupDate, imgLink, branchId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [orderId,Name, Contact,Quantity,formattedDate,additionalText,PickupDate,imageUrl,branchID], (error, result) => {
                     if (error) {
                         reject(error);
                     }

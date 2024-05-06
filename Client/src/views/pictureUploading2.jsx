@@ -14,6 +14,7 @@ export const PictureUploading2 = () => {
     const [Quantity, setQuantity] = useState('');
     const [PickupDate, setPickupDate] = useState('');
     const [additionalText, setAdditionalText] = useState('');
+    const [branchID, setBranchID] = useState('');
     
 
 // hhh
@@ -36,6 +37,11 @@ export const PictureUploading2 = () => {
 
     const handleSelectChange = (event) => {
         setSelectedOption(event.target.value);
+        const selectedBranch = options.find(option => option.branchName === event.target.value);
+        if (selectedBranch) {
+            const selectedBranchId = selectedBranch.branchID;
+            setBranchID(selectedBranchId);
+        }
     };
     const handlePickupChange = (event) => {
         setPickupDate(event.target.value);
@@ -57,16 +63,17 @@ export const PictureUploading2 = () => {
         e.preventDefault();
         const today = new Date();
         const formattedDate = today.toISOString().split('T')[0];
-        console.log(imageUrl,PickupDate,Name,Contact,selectedOption,Quantity,formattedDate,additionalText);
+        console.log(imageUrl,PickupDate,Name,Contact,selectedOption,Quantity,formattedDate,additionalText,branchID);
         try {
-            const response = await axios.post('http://localhost:3001/server/pictureUploading//placePictureUploadingOrder', {
+            const response = await axios.post('http://localhost:3001/server/pictureUploading/placePictureUploadingOrder', {
                 Name,
                 Contact,
                 Quantity,
                 formattedDate,
                 additionalText,
                 PickupDate,
-                imageUrl
+                imageUrl,
+                branchID
             });
 
             if (response.status === 200) {

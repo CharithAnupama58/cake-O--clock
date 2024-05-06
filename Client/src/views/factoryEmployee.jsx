@@ -9,6 +9,7 @@ import image13 from '../assets/images/image 13.png';
 import image14 from '../assets/images/images 14.png';
 import CustomizeOrder from '../components/customizeOrder';
 import TemporaryOrders from '../components/TemporaryOrders';
+import PictureOrder from '../components/pictureOrders';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -112,6 +113,7 @@ const FactoryEmployee = () => {
                 </div>
                 <div className="flex flex-col items-center text-black flex-grow">
                     {selectedInterface === 'customizeCakeOrder' && <CustomizeOrder />}
+                    {selectedInterface=== 'pictureUploadingCakeOrder' && <PictureOrder />}
                     {selectedInterface === 'temporaryOrders' && <TemporaryOrders />}
                 </div>
                 

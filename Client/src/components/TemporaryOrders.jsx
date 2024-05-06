@@ -9,7 +9,7 @@ const TemporaryOrders = () => {
     useEffect(() => {          
         handleAllOrders();
         
-    },);
+    }, []);
 
     const handleAllOrders = async () => {
         try {
@@ -20,6 +20,37 @@ const TemporaryOrders = () => {
             console.error('Error fetching items:', error);
           }
         };
+        const handleSend = async (rowData) => {
+            // console.log(rowData);
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            const { temporderId,name, contact, quantity,cakeText, pickupDate, imgLink, branchId } = rowData;
+            console.log( name, contact, quantity,cakeText, pickupDate, imgLink, branchId,formattedDate);
+        try {
+            const response = await axios.post('http://localhost:3001/server/order/savePictureOrders', {
+                temporderId,
+                name,
+                contact,
+                quantity,
+                formattedDate,
+                cakeText,
+                pickupDate,
+                imgLink,
+                branchId
+                
+            });
+
+            if (response.status === 200) {
+                alert('Feedback submitted successfully');
+                // navigate(`/CustomizeCake2/${cakeId}/${additionalText}`);
+            } else {
+                console.error('Invalid username or password');
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+            console.error('Failed to login. Please try again later.');
+        }
+    };
         
     
 
@@ -70,10 +101,10 @@ const TemporaryOrders = () => {
                                         </td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.cakeText}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            <button className='rounded-xl w-20 font-bold'  style={{ backgroundColor: "blue" }} >Send</button>
+                                            <button className='rounded-xl w-20 font-bold text-white'  style={{ backgroundColor: "blue" }} onClick={() => handleSend(item)}>Send</button>
                                         </td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            <button className='rounded-xl w-20 font-bold' disabled={item.status === "Preparing"} style={{ backgroundColor: "red" }}>Delete</button>
+                                            <button className='rounded-xl w-20 font-bold text-white'  style={{ backgroundColor: "red" }} onClick={() => handleDelete(item.temporderId)}>Delete</button>
                                         </td>
                                     </tr>
                                 ))}
