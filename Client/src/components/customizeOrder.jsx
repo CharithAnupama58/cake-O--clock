@@ -70,11 +70,37 @@ const CustomizeOrder = () => {
     };
 
     const handleDownload = () => {
-        const doc = new jsPDF();
-        const table = document.getElementById('stockTable');
-        doc.autoTable({ html: table });
-        doc.save('table.pdf');
-
+        let table;
+        let doc;
+        let excludedColumnIndex;
+        let rows;
+        switch (selectedOption) {
+            case "All Orders":
+                table = document.getElementById('stockTable');
+                doc = new jsPDF();
+                doc.autoTable({ html: table });
+                doc.save('table.pdf');
+                break;
+                
+            case "Orders To Prepare":
+                doc = new jsPDF();
+                table = document.getElementById('orderPrepareTable');
+                if (table) {
+                    excludedColumnIndex = 9; 
+                    rows = table.getElementsByTagName('td');
+                    for (let i = 0; i < rows.length; i++) {
+                        if (rows[i]) {
+                            let cell = rows[i].getElementsByTagName('td')[excludedColumnIndex];
+                            if (cell) {
+                                rows[i].removeChild(cell);
+                            }
+                        }
+                    }
+                    doc.autoTable({ html: table });
+                    doc.save('table.pdf'); 
+                }
+                break;
+            }
     }
     
     return (
@@ -83,7 +109,7 @@ const CustomizeOrder = () => {
                         <h1 className='mt-10 font-bold text-4xl'>Customize Cake Orders</h1>
                         <div>
                             <label className="font-semibold text-xl">Filter Items:</label>
-                            <select id="combo-box" className="mt-16 h-10 px-3 rounded border border-black" value={selectedOption} onChange={handleSelectChange}  >
+                            <select id="combo-box" className="mt-12 h-10 px-3 rounded border border-black" value={selectedOption} onChange={handleSelectChange}  >
                                 <option value="">Select a Type</option>
                                     <option>All Orders</option>
                                     <option>Orders To Prepare</option>
@@ -91,7 +117,7 @@ const CustomizeOrder = () => {
                         </div>
                         {showAllOrders && (
                         <div className="w-full max-h-96 overflow-y-auto">
-                        <table className="table-auto border border-collapse border-gray-400 mt-10" id='stockTable'>
+                        <table className="table-auto border border-collapse border-gray-400 mt-14" id='stockTable'>
                             <thead>
                                 <tr>
                                     <th className="border border-gray-400 px-5 py-3">Order ID</th>
@@ -119,9 +145,7 @@ const CustomizeOrder = () => {
                                             })()}
                                         </td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            <a href={item.imageLink} target="_blank" rel="noopener noreferrer" style={{textDecoration: 'underline'}}>
-                                                {item.imageLink}
-                                            </a>
+                                        <span className='text-blue-700' style={{textDecoration: 'underline', cursor: 'pointer'}} onClick={() => window.open(item.imageLink, "_blank")}>Link</span>
                                         </td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.cakeText}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.status}</td>
@@ -133,7 +157,7 @@ const CustomizeOrder = () => {
                         )}
                         {showOrdersToPrepare && (
                         <div className="w-full max-h-96 overflow-y-auto">
-                        <table className="table-auto border border-collapse border-gray-400 mt-10" id='stockTable'>
+                        <table className="table-auto border border-collapse border-gray-400 mt-10" id='orderPrepareTable'>
                             <thead>
                                 <tr>
                                     <th className="border border-gray-400 px-5 py-3">Order ID</th>
@@ -163,14 +187,12 @@ const CustomizeOrder = () => {
                                         </td>
 
                                         <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            <a href={item.imageLink} target="_blank" rel="noopener noreferrer" style={{textDecoration: 'underline'}}>
-                                                {item.imageLink}
-                                            </a>
+                                            <span className='text-blue-700' style={{textDecoration: 'underline', cursor: 'pointer'}} onClick={() => window.open(item.imageLink, "_blank")}>Link</span>
                                         </td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.cakeText}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.status}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            <button disabled={item.status === "Preparing"} style={{ backgroundColor: item.status === "Preparing" ? "grey" : "blue" }} onClick={() => updateStatus(item.orderId)}>Prepare</button>
+                                            <button className='rounded-xl w-20' disabled={item.status === "Preparing"} style={{ backgroundColor: item.status === "Preparing" ? "grey" : "blue" }} onClick={() => updateStatus(item.orderId)}>Prepare</button>
                                         </td>
                                     </tr>
                                 ))}

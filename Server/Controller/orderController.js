@@ -73,3 +73,27 @@ export const updateOrderStatus = async (req, res) => {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+export const getAllTemporaryOrderDetails = async (req, res) => {
+    try {
+        const items = await new Promise((resolve, reject) => {
+            db.query('SELECT * FROM tempOrders', (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+        // console.log({items});
+        if (items.length > 0) {
+            return res.status(200).json({ items });
+            
+        } else {
+            return res.status(404).json({ error: 'No items found' });
+        }
+    } catch (error) {
+        console.log('Error fetching items:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
