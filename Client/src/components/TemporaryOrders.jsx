@@ -1,7 +1,8 @@
 import  { useState, useEffect } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable'
+import 'jspdf-autotable';
+import Swal from 'sweetalert2';
 
 const TemporaryOrders = () => {
     const [items, setItems] = useState([]);
@@ -51,25 +52,71 @@ const TemporaryOrders = () => {
             console.error('Failed to login. Please try again later.');
         }
     };
-        
-    
+    const handleDelete = async (temporderId) => {        
+        console.log(temporderId);
+    try {
+        const response = await axios.post('http://localhost:3001/server/order/deleteTempOrder', {
+            temporderId,
+        });
 
-    const handleDownload = () => {
+        if (response.status === 200) {
+            
+            handleAllOrders();
+            // navigate(`/CustomizeCake2/${cakeId}/${additionalText}`);
+        } else {
+            console.error('Invalid username or password');
+        }
+    } catch (error) {
+        console.error('Login failed:', error);
+        console.error('Failed to login. Please try again later.');
+    }
+};
+const confirmDelete = (temporderId) => {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You will not be able to recover this item!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            handleDelete(temporderId);
+            renderTable();
+            Swal.fire(
+                'Deleted!',
+                'Your item has been deleted.',
+                'success'
+            );
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+                'Cancelled',
+                'Your item is safe :)',
+                'error'
+            );
+        }
+    });
+};
+
+        
+  const handleDownload = () => {
         const doc = new jsPDF();
         const table = document.getElementById('stockTable');
         doc.autoTable({ html: table });
         doc.save('table.pdf');
     }
 
-    
-    return (
-        <div className='flex flex-row w-full justify-center'>
-            <div className='flex flex-col items-center'>
-                        <h1 className='mt-10 font-bold text-4xl'>Temporary Cake Orders</h1>
-                        
-                        <div className="w-full max-h-96 overflow-y-auto">
-                        <table className="table-auto border border-collapse border-gray-400 mt-14" id='stockTable'>
-                            <thead>
+    const renderTable = () => {
+        if (items.length === 0) {
+            return (
+                <div className="text-center mt-5 font-bold text-2xl">No Temporary Orders found</div>
+            );
+        } else {
+            return (
+                <div className="w-full max-h-96 overflow-y-auto">
+                    <table className="table-auto border border-collapse border-gray-400 mt-14" id='stockTable'>
+                        <thead>
                                 <tr>
                                     <th className="border border-gray-400 px-5 py-3">TempOrder ID</th>
                                     <th className="border border-gray-400 px-10 py-3">Name</th>
@@ -104,13 +151,24 @@ const TemporaryOrders = () => {
                                             <button className='rounded-xl w-20 font-bold text-white'  style={{ backgroundColor: "blue" }} onClick={() => handleSend(item)}>Send</button>
                                         </td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            <button className='rounded-xl w-20 font-bold text-white'  style={{ backgroundColor: "red" }} onClick={() => handleDelete(item.temporderId)}>Delete</button>
+                                            <button className='rounded-xl w-20 font-bold text-white'  style={{ backgroundColor: "red" }} onClick={() => confirmDelete(item.temporderId)}>Delete</button>
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
-                        </table>
-                        </div>
+                    </table>
+                </div>
+            );
+        }
+    }
+
+    
+    return (
+        <div className='flex flex-row w-full justify-center'>
+            <div className='flex flex-col items-center'>
+                        <h1 className='mt-10 font-bold text-4xl'>Temporary Cake Orders</h1>
+                        {renderTable()}
+                        
                         <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6' onClick={handleDownload}>Download Report</button>
                 </div>
         </div>

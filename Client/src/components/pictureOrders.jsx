@@ -11,9 +11,9 @@ const PictureOrder = () => {
     const [selectedOption, setSelectedOption] = useState('');
 
     useEffect(() => {          
-        // handleAllOrders();
+        handleAllOrders();
         
-    },);
+    },[]);
 
     const handleAllOrders = async () => {
         try {
@@ -27,7 +27,7 @@ const PictureOrder = () => {
         };
         const handleOrdersToPrepare = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/server/order/orderDetails'); 
+                const response = await axios.get('http://localhost:3001/server/order/picorderDetails'); 
                 setOrders(response.data.items);
                 setShowOrdersToPrepare(true);
                 setShowAllOrders(false);
@@ -38,7 +38,7 @@ const PictureOrder = () => {
         const updateStatus = async (orderId) => {
             console.log(orderId);
             try {
-                const response = await axios.post('http://localhost:3001/server/order/updateStatus', {
+                const response = await axios.post('http://localhost:3001/server/order/updatePicStatus', {
                     orderId,
                 });
     
@@ -102,23 +102,11 @@ const PictureOrder = () => {
                 break;
             }
     }
-    
-    return (
-        <div className='flex flex-row w-full justify-center'>
-            <div className='flex flex-col items-center'>
-                        <h1 className='mt-10 font-bold text-4xl'>Picture Uploading Cake Orders</h1>
-                        <div>
-                            <label className="font-semibold text-xl">Filter Items:</label>
-                            <select id="combo-box" className="mt-12 h-10 px-3 rounded border border-black" value={selectedOption} onChange={handleSelectChange}  >
-                                <option value="">Select a Type</option>
-                                    <option>All Orders</option>
-                                    <option>Orders To Prepare</option>
-                            </select>
-                        </div>
-                        {showAllOrders && (
-                        <div className="w-full max-h-96 overflow-y-auto">
-                        <table className="table-auto border border-collapse border-gray-400 mt-14" id='stockTable'>
-                            <thead>
+    const renderTable = () => {
+        if (showAllOrders) {
+            return (
+                <table className="table-auto border border-collapse border-gray-400 mt-14" id='stockTable'>
+                    <thead>
                                 <tr>
                                     <th className="border border-gray-400 px-5 py-3">Order ID</th>
                                     <th className="border border-gray-400 px-10 py-3">Name</th>
@@ -152,13 +140,12 @@ const PictureOrder = () => {
                                     </tr>
                                 ))}
                             </tbody>
-                        </table>
-                        </div>
-                        )}
-                        {showOrdersToPrepare && (
-                        <div className="w-full max-h-96 overflow-y-auto">
-                        <table className="table-auto border border-collapse border-gray-400 mt-10" id='orderPrepareTable'>
-                            <thead>
+                </table>
+            );
+        } else if (showOrdersToPrepare) {
+            return (
+                <table className="table-auto border border-collapse border-gray-400 mt-10" id='orderPrepareTable'>
+                    <thead>
                                 <tr>
                                     <th className="border border-gray-400 px-5 py-3">Order ID</th>
                                     <th className="border border-gray-400 px-10 py-3">Name</th>
@@ -174,7 +161,7 @@ const PictureOrder = () => {
                             <tbody className='flex-row justify-center items-center'>
                                 {orders.map((item, index) => (
                                     <tr key={index} className="my-4">
-                                        <td className="px-4 text-center border-r border-gray-400 py-3">{item.orderId}</td>
+                                        <td className="px-4 text-center border-r border-gray-400 py-3">{item.picOrderId}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.name}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.contact}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.quantity}</td>
@@ -187,19 +174,38 @@ const PictureOrder = () => {
                                         </td>
 
                                         <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            <span className='text-blue-700' style={{textDecoration: 'underline', cursor: 'pointer'}} onClick={() => window.open(item.imageLink, "_blank")}>Link</span>
+                                            <span className='text-blue-700' style={{textDecoration: 'underline', cursor: 'pointer'}} onClick={() => window.open(item.imgLink, "_blank")}>Link</span>
                                         </td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.cakeText}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.status}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            <button className='rounded-xl w-20' disabled={item.status === "Preparing"} style={{ backgroundColor: item.status === "Preparing" ? "grey" : "blue" }} onClick={() => updateStatus(item.orderId)}>Prepare</button>
+                                            <button className='rounded-xl w-20 text-white font-bold' disabled={item.status === "Preparing"} style={{ backgroundColor: item.status === "Preparing" ? "grey" : "blue" }} onClick={() => updateStatus(item.picOrderId)}>Prepare</button>
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
-                        </table>
-                    </div>
-                        )}
+                </table>
+            );
+        }
+    };
+
+    
+    return (
+        <div className='flex flex-row w-full justify-center'>
+            <div className='flex flex-col items-center'>
+                        <h1 className='mt-10 font-bold text-4xl'>Picture Uploading Cake Orders</h1>
+                        <div>
+                            <label className="font-semibold text-xl">Filter Items:</label>
+                            <select id="combo-box" className="mt-12 h-10 px-3 rounded border border-black" value={selectedOption} onChange={handleSelectChange}  >
+                                <option value="">Select a Type</option>
+                                    <option>All Orders</option>
+                                    <option>Orders To Prepare</option>
+                            </select>
+                        </div>
+                        
+                        <div className="w-full max-h-96 overflow-y-auto">
+                            {renderTable()}
+                        </div>
                         <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6' onClick={handleDownload}>Download Report</button>
                 </div>
         </div>

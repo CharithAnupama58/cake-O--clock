@@ -11,9 +11,9 @@ const CustomizeOrder = () => {
     const [selectedOption, setSelectedOption] = useState('');
 
     useEffect(() => {          
-        // handleAllOrders();
+        handleAllOrders();
         
-    },);
+    },[]);
 
     const handleAllOrders = async () => {
         try {
@@ -102,23 +102,11 @@ const CustomizeOrder = () => {
                 break;
             }
     }
-    
-    return (
-        <div className='flex flex-row w-full justify-center'>
-            <div className='flex flex-col items-center'>
-                        <h1 className='mt-10 font-bold text-4xl'>Customize Cake Orders</h1>
-                        <div>
-                            <label className="font-semibold text-xl">Filter Items:</label>
-                            <select id="combo-box" className="mt-12 h-10 px-3 rounded border border-black" value={selectedOption} onChange={handleSelectChange}  >
-                                <option value="">Select a Type</option>
-                                    <option>All Orders</option>
-                                    <option>Orders To Prepare</option>
-                            </select>
-                        </div>
-                        {showAllOrders && (
-                        <div className="w-full max-h-96 overflow-y-auto">
-                        <table className="table-auto border border-collapse border-gray-400 mt-14" id='stockTable'>
-                            <thead>
+    const renderTable = () => {
+        if (showAllOrders) {
+            return (
+                <table className="table-auto border border-collapse border-gray-400 mt-14" id='stockTable'>
+                    <thead>
                                 <tr>
                                     <th className="border border-gray-400 px-5 py-3">Order ID</th>
                                     <th className="border border-gray-400 px-10 py-3">Name</th>
@@ -152,13 +140,12 @@ const CustomizeOrder = () => {
                                     </tr>
                                 ))}
                             </tbody>
-                        </table>
-                        </div>
-                        )}
-                        {showOrdersToPrepare && (
-                        <div className="w-full max-h-96 overflow-y-auto">
-                        <table className="table-auto border border-collapse border-gray-400 mt-10" id='orderPrepareTable'>
-                            <thead>
+                </table>
+            );
+        } else if (showOrdersToPrepare) {
+            return (
+                <table className="table-auto border border-collapse border-gray-400 mt-10" id='orderPrepareTable'>
+                    <thead>
                                 <tr>
                                     <th className="border border-gray-400 px-5 py-3">Order ID</th>
                                     <th className="border border-gray-400 px-10 py-3">Name</th>
@@ -197,9 +184,27 @@ const CustomizeOrder = () => {
                                     </tr>
                                 ))}
                             </tbody>
-                        </table>
-                    </div>
-                        )}
+                </table>
+            );
+        }
+    };
+    
+    return (
+        <div className='flex flex-row w-full justify-center'>
+            <div className='flex flex-col items-center'>
+                        <h1 className='mt-10 font-bold text-4xl'>Customize Cake Orders</h1>
+                        <div>
+                            <label className="font-semibold text-xl">Filter Items:</label>
+                            <select id="combo-box" className="mt-12 h-10 px-3 rounded border border-black" value={selectedOption} onChange={handleSelectChange}  >
+                                <option value="">Select a Type</option>
+                                    <option>All Orders</option>
+                                    <option>Orders To Prepare</option>
+                            </select>
+                        </div>
+                        
+                        <div className="w-full max-h-96 overflow-y-auto">
+                            {renderTable()}
+                        </div>
                         <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6' onClick={handleDownload}>Download Report</button>
                 </div>
         </div>

@@ -201,3 +201,80 @@ export const getAllPictureOrderDetails = async (req, res) => {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+export const deletePicOrders = async (req, res) => {
+    const { temporderId} = req.body;
+    console.log(temporderId);
+    try {
+            const InsertResult = await new Promise((resolve, reject) => {
+                db.query('DELETE FROM tempOrders WHERE temporderId = ?', [temporderId], (error, result) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(result);
+                });
+            });
+
+            if (InsertResult.affectedRows >= 1) {
+                return res.status(200).json({ message: 'Order details updated successfully' });
+            } else {
+                return res.status(500).json({ error: 'Failed to update Order details' });
+            }
+        
+    } catch (error) {
+        console.log('Error saving stock details:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+export const getPicOrderDetails = async (req, res) => {
+    try {
+        const items = await new Promise((resolve, reject) => {
+            db.query('SELECT * FROM picUploadingOrders WHERE pickupDate = DATE_ADD(CURDATE(), INTERVAL 4 DAY)', (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+        // console.log({items});
+        if (items.length > 0) {
+            return res.status(200).json({ items });
+            
+        } else {
+            return res.status(404).json({ error: 'No items found' });
+        }
+    } catch (error) {
+        console.log('Error fetching items:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+export const updatePicOrderStatus = async (req, res) => {
+    const { orderId} = req.body;
+    const status="Preparing"
+    console.log(status);
+    console.log(orderId);
+    try {
+            const InsertResult = await new Promise((resolve, reject) => {
+                db.query('UPDATE picUploadingOrders SET status = "Preparing" WHERE picOrderId = ?', [orderId], (error, result) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(result);
+                });
+            });
+
+            if (InsertResult.affectedRows >= 1) {
+                return res.status(200).json({ message: 'Order details updated successfully' });
+            } else {
+                return res.status(500).json({ error: 'Failed to update Order details' });
+            }
+        
+    } catch (error) {
+        console.log('Error saving stock details:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
