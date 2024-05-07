@@ -1,5 +1,5 @@
 import express from 'express';
-import { getOrderDetails,getAllOrderDetails,updateOrderStatus,getAllTemporaryOrderDetails,savePicOrders,getAllPictureOrderDetails,deletePicOrders,getPicOrderDetails,updatePicOrderStatus } from '../Controller/orderController.js';
+import { getOrderDetails,getAllOrderDetails,updateOrderStatus,getAllTemporaryOrderDetails,savePicOrders,getAllPictureOrderDetails,deletePicOrders,getPicOrderDetails,updatePicOrderStatus,getTodayCustomOrderDetails,updateOrderReleseStatus,getTodayPictureOrderDetails,updatePicOrderReleseStatus } from '../Controller/orderController.js';
 
 const router = express.Router();
 
@@ -19,8 +19,20 @@ router.get('/AllPictureorderDetails', async (req, res) => {
 router.get('/AllTemporaryOrderDetails', async (req, res) => {
     await getAllTemporaryOrderDetails(req, res);
 });
+router.get('/CustomizeorderDetails', async (req, res) => {
+    await getTodayCustomOrderDetails(req, res);
+});
+router.get('/pictureUploadingOrderDetails', async (req, res) => {
+    await getTodayPictureOrderDetails(req, res);
+});
 router.post('/updateStatus', async (req, res) => {
     await updateOrderStatus(req, res);
+});
+router.post('/updateReleaseStatus', async (req, res) => {
+    await updateOrderReleseStatus(req, res);
+});
+router.post('/updatePicReleaseStatus', async (req, res) => {
+    await updatePicOrderReleseStatus(req, res);
 });
 router.post('/updatePicStatus', async (req, res) => {
     await updatePicOrderStatus(req, res);

@@ -10,6 +10,7 @@ import image14 from '../assets/images/images 14.png';
 import CustomizeOrder from '../components/customizeOrder';
 import TemporaryOrders from '../components/TemporaryOrders';
 import PictureOrder from '../components/pictureOrders';
+import TodayOrders from '../components/TodayOrders';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -87,12 +88,7 @@ const FactoryEmployee = () => {
                                 <h1 className='font-bold text-xl'>Temporary Orders</h1>   
                             </div>
                         </button>
-                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`} >
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('releaseOrder')}> 
-                                <img src={image10} className='w-8 h-8' alt='Icon'></img>
-                                <h1 className='font-bold text-xl'>Release Order</h1>   
-                            </div>
-                        </button>
+                    
                         <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`}>
                             <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('todaysOrder')}> 
                                 <img src={image11} className='w-8 h-8' alt='Icon'></img>
@@ -115,6 +111,7 @@ const FactoryEmployee = () => {
                     {selectedInterface === 'customizeCakeOrder' && <CustomizeOrder />}
                     {selectedInterface=== 'pictureUploadingCakeOrder' && <PictureOrder />}
                     {selectedInterface === 'temporaryOrders' && <TemporaryOrders />}
+                    {selectedInterface === 'todaysOrder' && <TodayOrders />}
                 </div>
                 
             </div>
