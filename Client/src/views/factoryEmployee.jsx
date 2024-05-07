@@ -11,6 +11,7 @@ import CustomizeOrder from '../components/customizeOrder';
 import TemporaryOrders from '../components/TemporaryOrders';
 import PictureOrder from '../components/pictureOrders';
 import TodayOrders from '../components/TodayOrders';
+import CancelOrder from '../components/cancelOrder';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -112,6 +113,7 @@ const FactoryEmployee = () => {
                     {selectedInterface=== 'pictureUploadingCakeOrder' && <PictureOrder />}
                     {selectedInterface === 'temporaryOrders' && <TemporaryOrders />}
                     {selectedInterface === 'todaysOrder' && <TodayOrders />}
+                    {selectedInterface === 'cancelOrder' && <CancelOrder />}
                 </div>
                 
             </div>

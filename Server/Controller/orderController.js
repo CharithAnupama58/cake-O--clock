@@ -27,7 +27,7 @@ export const getOrderDetails = async (req, res) => {
 export const getAllOrderDetails = async (req, res) => {
     try {
         const items = await new Promise((resolve, reject) => {
-            db.query('SELECT o.orderId,o.name,o.contact,o.quantity,o.pickupDate,o.status,i.imgLink AS imageLink,o.cakeText FROM Orders o JOIN cake c ON o.cakeId = c.CID JOIN image i ON c.imgID = i.imgID order by orderId  ASC', (error, results) => {
+            db.query('SELECT o.orderId, o.name, o.contact, o.quantity, o.pickupDate, o.status, i.imgLink AS imageLink, o.cakeText FROM orders o JOIN cake c ON o.cakeId = c.CID JOIN image i ON c.imgID = i.imgID  WHERE o.pickupDate >= CURDATE() AND o.status != "Deleted" AND o.status != "Released" ORDER BY orderId ASC', (error, results) => {
                 if (error) {
                     reject(error);
                 } else {
@@ -181,7 +181,7 @@ export const savePicOrders = async (req, res) => {
 export const getAllPictureOrderDetails = async (req, res) => {
     try {
         const items = await new Promise((resolve, reject) => {
-            db.query('SELECT * FROM picUploadingOrders', (error, results) => {
+            db.query('SELECT * FROM picUploadingOrders WHERE pickupDate >= CURDATE() AND  status != "Deleted" AND status != "Released" ORDER BY picOrderId ASC', (error, results) => {
                 if (error) {
                     reject(error);
                 } else {
@@ -379,3 +379,57 @@ export const updatePicOrderReleseStatus = async (req, res) => {
     }
 };
 
+export const deleteCustomizeOrders = async (req, res) => {
+    const { orderId} = req.body;
+    const status="Preparing"
+    console.log(status);
+    console.log(orderId);
+    try {
+            const InsertResult = await new Promise((resolve, reject) => {
+                db.query('UPDATE orders SET status = "Deleted" WHERE orderId = ?', [orderId], (error, result) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(result);
+                });
+            });
+
+            if (InsertResult.affectedRows >= 1) {
+                return res.status(200).json({ message: 'Order details updated successfully' });
+            } else {
+                return res.status(500).json({ error: 'Failed to update Order details' });
+            }
+        
+    } catch (error) {
+        console.log('Error saving stock details:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+export const deletePictureUploadOrders = async (req, res) => {
+    const { picOrderId} = req.body;
+    const status="Preparing"
+    console.log(status);
+    console.log(picOrderId);
+    try {
+            const InsertResult = await new Promise((resolve, reject) => {
+                db.query('UPDATE picUploadingOrders SET status = "Deleted" WHERE picOrderId = ?', [picOrderId], (error, result) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(result);
+                });
+            });
+
+            if (InsertResult.affectedRows >= 1) {
+                return res.status(200).json({ message: 'Order details updated successfully' });
+            } else {
+                return res.status(500).json({ error: 'Failed to update Order details' });
+            }
+        
+    } catch (error) {
+        console.log('Error saving stock details:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};

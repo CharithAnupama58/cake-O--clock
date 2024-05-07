@@ -1,5 +1,5 @@
 import express from 'express';
-import { getOrderDetails,getAllOrderDetails,updateOrderStatus,getAllTemporaryOrderDetails,savePicOrders,getAllPictureOrderDetails,deletePicOrders,getPicOrderDetails,updatePicOrderStatus,getTodayCustomOrderDetails,updateOrderReleseStatus,getTodayPictureOrderDetails,updatePicOrderReleseStatus } from '../Controller/orderController.js';
+import { getOrderDetails,getAllOrderDetails,updateOrderStatus,getAllTemporaryOrderDetails,savePicOrders,getAllPictureOrderDetails,deletePicOrders,getPicOrderDetails,updatePicOrderStatus,getTodayCustomOrderDetails,updateOrderReleseStatus,getTodayPictureOrderDetails,updatePicOrderReleseStatus,deleteCustomizeOrders,deletePictureUploadOrders } from '../Controller/orderController.js';
 
 const router = express.Router();
 
@@ -43,5 +43,10 @@ router.post('/savePictureOrders', async (req, res) => {
 router.post('/deleteTempOrder', async (req, res) => {
     await deletePicOrders(req, res);
 });
-
+router.post('/deleteCustomizeOrder', async (req, res) => {
+    await deleteCustomizeOrders(req, res);
+});
+router.post('/deletePictureUploadOrder', async (req, res) => {
+    await deletePictureUploadOrders(req, res);
+});
 export default router;

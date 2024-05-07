@@ -144,7 +144,7 @@ export const getItemExpiryDates = async (req, res) => {
     try {
         // Query to retrieve all item details from the database
         const ExpioryDates = await new Promise((resolve, reject) => {
-            db.query('SELECT ExpiryDate FROM Stock WHERE ItemId = ?', [ItemId], (error, results) => {
+            db.query('SELECT ExpiryDate FROM Stock WHERE ItemId = ? AND ExpiryDate > CURDATE()', [ItemId], (error, results) => {
                 if (error) {
                     reject(error);
                 } else {
