@@ -10,6 +10,7 @@ const PictureOrder = () => {
     const [showAllOrders, setShowAllOrders] = useState(false);
     const [showOrdersToPrepare, setShowOrdersToPrepare] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {   
         setSelectedOption('All Orders');       
@@ -66,6 +67,19 @@ const PictureOrder = () => {
                 console.error('Failed to login. Please try again later.');
             }
         };
+
+        const handleSearch = (e) => {
+            setSearchQuery(e.target.value);
+        };
+    
+        const filteredItems = items.filter(item =>
+            (typeof item.picOrderId === 'string' && item.picOrderId.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (typeof item.name === 'string' && item.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (typeof item.contact === 'string' && item.contact.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (typeof item.quantity === 'string' && item.quantity.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (typeof item.pickupDate === 'string' && item.pickupDate.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (typeof item.status === 'string' && item.status.toLowerCase().includes(searchQuery.toLowerCase()))
+        );
     
     const handleSelectChange = (event) => {
         setSelectedOption(event.target.value);
@@ -118,42 +132,48 @@ const PictureOrder = () => {
     const renderTable = () => {
         if (showAllOrders) {
             return (
-                <table className="table-auto border border-collapse border-gray-400 mt-14" id='stockTable'>
-                    <thead>
-                                <tr>
-                                    <th className="border border-gray-400 px-5 py-3">Order ID</th>
-                                    <th className="border border-gray-400 px-10 py-3">Name</th>
-                                    <th className="border border-gray-400 px-12 py-3">Contact</th>
-                                    <th className="border border-gray-400 px-2 py-3">Quantity</th>
-                                    <th className="border border-gray-400 px-4 py-3">Pickup Date</th>
-                                    <th className="border border-gray-400 px-4 py-3">Image Link</th>
-                                    <th className="border border-gray-400 px-12 py-3">Cake Text</th>
-                                    <th className="border border-gray-400 px-8 py-3">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody className='flex-row justify-center items-center'>
-                                {items.map((item, index) => (
-                                    <tr key={index} className="my-4">
-                                        <td className="px-4 text-center border-r border-gray-400 py-3">{item.picOrderId}</td>
-                                        <td className="px-4 text-center border-r border-gray-400 py-3">{item.name}</td>
-                                        <td className="px-4 text-center border-r border-gray-400 py-3">{item.contact}</td>
-                                        <td className="px-4 text-center border-r border-gray-400 py-3">{item.quantity}</td>
-                                        <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            {(() => {
-                                                const pickupDate = new Date(item.pickupDate);
-                                                pickupDate.setDate(pickupDate.getDate() + 1);
-                                                return pickupDate.toISOString().split('T')[0];
-                                            })()}
-                                        </td>
-                                        <td className="px-4 text-center border-r border-gray-400 py-3">
-                                        <span className='text-blue-700' style={{textDecoration: 'underline', cursor: 'pointer'}} onClick={() => window.open(item.imgLink, "_blank")}>Link</span>
-                                        </td>
-                                        <td className="px-4 text-center border-r border-gray-400 py-3">{item.cakeText}</td>
-                                        <td className="px-4 text-center border-r border-gray-400 py-3">{item.status}</td>
+                <div>
+                    <div className='flex justify-center'>
+                            <label className="font-semibold text-xl mt-8">Search Order:</label>
+                            <input type="text" className=" ml-4 border border-gray-400 px-4 py-0 mt-8 rounded-xl" placeholder="Search Orders" onChange={handleSearch} />
+                    </div> 
+                    <table className="table-auto border border-collapse border-gray-400 mt-14" id='stockTable'>
+                        <thead>
+                                    <tr>
+                                        <th className="border border-gray-400 px-5 py-3">Order ID</th>
+                                        <th className="border border-gray-400 px-10 py-3">Name</th>
+                                        <th className="border border-gray-400 px-12 py-3">Contact</th>
+                                        <th className="border border-gray-400 px-2 py-3">Quantity</th>
+                                        <th className="border border-gray-400 px-4 py-3">Pickup Date</th>
+                                        <th className="border border-gray-400 px-4 py-3">Image Link</th>
+                                        <th className="border border-gray-400 px-12 py-3">Cake Text</th>
+                                        <th className="border border-gray-400 px-8 py-3">Status</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                </table>
+                                </thead>
+                                <tbody className='flex-row justify-center items-center'>
+                                    {filteredItems.map((item, index) => (
+                                        <tr key={index} className="my-4">
+                                            <td className="px-4 text-center border-r border-gray-400 py-3">{item.picOrderId}</td>
+                                            <td className="px-4 text-center border-r border-gray-400 py-3">{item.name}</td>
+                                            <td className="px-4 text-center border-r border-gray-400 py-3">{item.contact}</td>
+                                            <td className="px-4 text-center border-r border-gray-400 py-3">{item.quantity}</td>
+                                            <td className="px-4 text-center border-r border-gray-400 py-3">
+                                                {(() => {
+                                                    const pickupDate = new Date(item.pickupDate);
+                                                    pickupDate.setDate(pickupDate.getDate() + 1);
+                                                    return pickupDate.toISOString().split('T')[0];
+                                                })()}
+                                            </td>
+                                            <td className="px-4 text-center border-r border-gray-400 py-3">
+                                            <span className='text-blue-700' style={{textDecoration: 'underline', cursor: 'pointer'}} onClick={() => window.open(item.imgLink, "_blank")}>Link</span>
+                                            </td>
+                                            <td className="px-4 text-center border-r border-gray-400 py-3">{item.cakeText}</td>
+                                            <td className="px-4 text-center border-r border-gray-400 py-3">{item.status}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                    </table>
+                </div>
             );
         } else if (showOrdersToPrepare) {
             return (

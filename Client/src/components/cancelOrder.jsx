@@ -11,7 +11,8 @@ const CancelOrders = () => {
     const [showOrdersToPrepare, setShowOrdersToPrepare] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
 
-    useEffect(() => {          
+    useEffect(() => {   
+        setSelectedOption('Customize Orders')       
         handleAllOrders();
         
     },[]);

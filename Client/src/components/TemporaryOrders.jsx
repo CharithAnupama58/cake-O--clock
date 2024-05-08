@@ -169,7 +169,7 @@ const confirmDelete = (temporderId) => {
                         <h1 className='mt-10 font-bold text-4xl'>Temporary Cake Orders</h1>
                         {renderTable()}
                         
-                        <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6' onClick={handleDownload}>Download Report</button>
+                        <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6' disabled={items.length === 0}  onClick={handleDownload}>Download Report</button>
                 </div>
         </div>
     );
