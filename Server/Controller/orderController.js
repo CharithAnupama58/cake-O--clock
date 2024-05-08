@@ -3,7 +3,7 @@ import {db} from '../server.js'
 export const getOrderDetails = async (req, res) => {
     try {
         const items = await new Promise((resolve, reject) => {
-            db.query('SELECT o.orderId,o.name,o.contact,o.quantity,o.pickupDate,o.status,i.imgLink AS imageLink,o.cakeText FROM Orders o JOIN cake c ON o.cakeId = c.CID JOIN image i ON c.imgID = i.imgID WHERE o.pickupDate = DATE_ADD(CURDATE(), INTERVAL 4 DAY)', (error, results) => {
+            db.query('SELECT o.orderId,o.name,o.contact,o.quantity,o.pickupDate,o.status,i.imgLink AS imageLink,o.cakeText FROM Orders o JOIN cake c ON o.cakeId = c.CID JOIN image i ON c.imgID = i.imgID WHERE o.pickupDate = DATE_ADD(CURDATE(), INTERVAL 4 DAY) AND o.status != "Deleted"', (error, results) => {
                 if (error) {
                     reject(error);
                 } else {
@@ -16,7 +16,8 @@ export const getOrderDetails = async (req, res) => {
             return res.status(200).json({ items });
             
         } else {
-            return res.status(404).json({ error: 'No items found' });
+            return res.status(404).json({items});
+            console.log('No items found');
         }
     } catch (error) {
         console.log('Error fetching items:', error);

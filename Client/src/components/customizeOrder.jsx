@@ -1,7 +1,8 @@
 import  { useState, useEffect } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable'
+import 'jspdf-autotable';
+import Swal from 'sweetalert2';
 
 const CustomizeOrder = () => {
     const [items, setItems] = useState([]);
@@ -10,8 +11,10 @@ const CustomizeOrder = () => {
     const [showOrdersToPrepare, setShowOrdersToPrepare] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
 
-    useEffect(() => {          
+    useEffect(() => {    
+        setSelectedOption('All Orders');      
         handleAllOrders();
+        
         
     },[]);
 
@@ -23,6 +26,11 @@ const CustomizeOrder = () => {
             setShowOrdersToPrepare(false);
           } catch (error) {
             console.error('Error fetching items:', error);
+            Swal.fire({
+                icon: 'info',
+                title: 'No Orders Yet',
+                text: 'There are currently no orders to prepare.',
+            });
           }
         };
         const handleOrdersToPrepare = async () => {
@@ -32,7 +40,14 @@ const CustomizeOrder = () => {
                 setShowOrdersToPrepare(true);
                 setShowAllOrders(false);
               } catch (error) {
+                
                 console.error('Error fetching items:', error);
+                Swal.fire({
+                    icon: 'info',
+                    title: 'No Orders to Prepare',
+                    text: 'There are currently no orders to prepare.',
+                });
+                setSelectedOption('All Orders');
               }
         };
         const updateStatus = async (orderId) => {
@@ -103,7 +118,7 @@ const CustomizeOrder = () => {
             }
     }
     const renderTable = () => {
-        if (showAllOrders) {
+        if (showAllOrders ) {
             return (
                 <table className="table-auto border border-collapse border-gray-400 mt-14" id='stockTable'>
                     <thead>
@@ -143,6 +158,12 @@ const CustomizeOrder = () => {
                 </table>
             );
         } else if (showOrdersToPrepare) {
+            if (orders.length === 0) {
+                console.log("if working");
+                return (
+                    <div className="text-center mt-5 font-bold text-2xl">No Orders to Prepare</div>
+                );
+            }else{
             return (
                 <table className="table-auto border border-collapse border-gray-400 mt-10" id='orderPrepareTable'>
                     <thead>
@@ -187,7 +208,8 @@ const CustomizeOrder = () => {
                 </table>
             );
         }
-    };
+    }
+};
     
     return (
         <div className='flex flex-row w-full justify-center'>

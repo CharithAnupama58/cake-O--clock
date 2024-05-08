@@ -1,7 +1,8 @@
 import  { useState, useEffect } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable'
+import 'jspdf-autotable';
+import Swal from 'sweetalert2';
 
 const TodayOrders = () => {
     const [items, setItems] = useState([]);
@@ -10,7 +11,8 @@ const TodayOrders = () => {
     const [showOrdersToPrepare, setShowOrdersToPrepare] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
 
-    useEffect(() => {          
+    useEffect(() => {   
+        setSelectedOption('Customize Orders');       
         handleAllOrders();
         
     },[]);
@@ -23,6 +25,12 @@ const TodayOrders = () => {
             setShowOrdersToPrepare(false);
           } catch (error) {
             console.error('Error fetching items:', error);
+            Swal.fire({
+                icon: 'info',
+                title: 'No Customize Orders Today',
+                text: 'There are currently no Picture orders to Release.',
+            });
+            setSelectedOption('');
           }
         };
         const handleOrdersToPrepare = async () => {
@@ -33,6 +41,12 @@ const TodayOrders = () => {
                 setShowAllOrders(false);
               } catch (error) {
                 console.error('Error fetching items:', error);
+                Swal.fire({
+                    icon: 'info',
+                    title: 'No Customize Orders Today',
+                    text: 'There are currently no Picture orders to Release.',
+                });
+                setSelectedOption('Customize Orders');
               }
         };
         const updateStatus = async (orderId) => {
