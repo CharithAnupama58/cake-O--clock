@@ -24,11 +24,13 @@ const Login = () => {
             if (response.status === 200) {
                 alert('Login successful');
                 
-                const { job_role } = data; 
-                if (job_role === 'admin') {
+                const { jobRole,branchId } = data; 
+                if (jobRole === 'Stock Keeper') {
                     navigate('/StockManagement');
-                } else if (job_role === 'Software Engineer') {
+                } else if (jobRole === 'Factory Employee') {
                     navigate('/FactoryEmployee');
+                } else if (jobRole === 'Branch Employee') {
+                    navigate(`/BranchEmployee/${branchId}`);
                 }
             } else {
                 // If login fails, display error message

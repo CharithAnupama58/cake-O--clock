@@ -52,7 +52,7 @@ export const login=(req,res)=>{
 
     try {
         // Check if user exists in the database
-        db.query('SELECT * FROM user WHERE username = ?', [username], async (err, results) => {
+        db.query('SELECT * FROM user WHERE userName = ?', [username], async (err, results) => {
             if (err) {
                 console.error('Error during login:', err);
                 return res.status(500).json({ error: 'Internal Server Error', details: err.message });
@@ -66,8 +66,9 @@ export const login=(req,res)=>{
                 return res.status(401).json({ error: 'Invalid username or password' });
             }
             // Login successful
-            console.log(results[0].job_role);
-            res.status(200).json({ message: 'Login successful' ,job_role: results[0].job_role});
+            console.log(results[0].jobRole);
+            const { jobRole,branchId } = results[0];
+            res.status(200).json({ message: 'Login successful' ,jobRole,branchId});
         });
     } catch (error) {
         console.error('Error during login:', error);

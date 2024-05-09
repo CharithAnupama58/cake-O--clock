@@ -3,56 +3,51 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import Swal from 'sweetalert2';
+import { useParams } from 'react-router-dom';
 
-const TodayOrders = () => {
+const ReleaseOrders = () => {
     const [items, setItems] = useState([]);
     const [orders, setOrders] = useState([]);
     const [showAllOrders, setShowAllOrders] = useState(false);
     const [showOrdersToPrepare, setShowOrdersToPrepare] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
+    const {branchId} =useParams();
 
     useEffect(() => {   
         setSelectedOption('Customize Orders');       
         handleAllOrders();
+        // console.log(branchId);
         
     },[]);
 
     const handleAllOrders = async () => {
+        console.log(branchId);
         try {
-            const response = await axios.get('http://localhost:3001/server/order/CustomizeorderDetails'); 
+            const response = await axios.get(`http://localhost:3001/server/BranchEmployee/CustomizeDetails/${branchId}`);
             setItems(response.data.items);
             setShowAllOrders(true);
             setShowOrdersToPrepare(false);
-          } catch (error) {
-            console.error('Error fetching items:', error);
-            Swal.fire({
-                icon: 'info',
-                title: 'No Customize Orders Today',
-                text: 'There are currently no Picture orders to Release.',
-            });
-            setSelectedOption('');
-          }
-        };
+
+        } catch (error) {
+            console.error('Error fetching item details:', error);
+        }
+    };
+        
         const handleOrdersToPrepare = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/server/order/pictureUploadingOrderDetails'); 
+                const response = await axios.get(`http://localhost:3001/server/BranchEmployee/PictureDetails/${branchId}`);
                 setOrders(response.data.items);
-                setShowOrdersToPrepare(true);
                 setShowAllOrders(false);
-              } catch (error) {
-                console.error('Error fetching items:', error);
-                Swal.fire({
-                    icon: 'info',
-                    title: 'No Customize Orders Today',
-                    text: 'There are currently no Picture orders to Release.',
-                });
-                setSelectedOption('Customize Orders');
-              }
+                setShowOrdersToPrepare(true);
+    
+            } catch (error) {
+                console.error('Error fetching item details:', error);
+            }
         };
         const updateStatus = async (orderId) => {
             console.log(orderId);
             try {
-                const response = await axios.post('http://localhost:3001/server/order/updateReleaseStatus', {
+                const response = await axios.post('http://localhost:3001/server/BranchEmployee/updateReleaseStatus', {
                     orderId,
                 });
     
@@ -70,7 +65,7 @@ const TodayOrders = () => {
         const updatePicStatus = async (picOrderId) => {
             console.log(picOrderId);
             try {
-                const response = await axios.post('http://localhost:3001/server/order/updatePicReleaseStatus', {
+                const response = await axios.post('http://localhost:3001/server/BranchEmployee/updatePictureReleaseStatus', {
                     picOrderId,
                 });
     
@@ -167,7 +162,7 @@ const TodayOrders = () => {
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.cakeText}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.branchName}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            <button className='rounded-xl w-20 text-white font-bold' disabled={item.status === "Released"} style={{ backgroundColor: item.status === "Released" ? "grey" : "blue" }} onClick={() => updateStatus(item.orderId)}>Release</button>
+                                            <button className='rounded-xl w-20 text-white font-bold' disabled={item.status === "Completed"} style={{ backgroundColor: item.status === "Completed" ? "grey" : "blue" }} onClick={() => updateStatus(item.orderId)}>Send</button>
                                         </td>
                                     </tr>
                                 ))}
@@ -206,7 +201,7 @@ const TodayOrders = () => {
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.cakeText}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.branchName}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            <button className='rounded-xl w-20 text-white font-bold ' disabled={item.status === "Released" && item.status === "Completed"} style={{ backgroundColor: item.status === "Released" ? "grey" : "blue" }} onClick={() => updatePicStatus(item.picOrderId)}>Release</button>
+                                            <button className='rounded-xl w-20 text-white font-bold ' disabled={item.status === "Completed"} style={{ backgroundColor: item.status === "Completed" ? "grey" : "blue" }} onClick={() => updatePicStatus(item.picOrderId)}>Send</button>
                                         </td>
                                     </tr>
                                 ))}
@@ -219,7 +214,7 @@ const TodayOrders = () => {
     return (
         <div className='flex flex-row w-full justify-center'>
             <div className='flex flex-col items-center'>
-                        <h1 className='mt-10 font-bold text-4xl'>Today's Cake Orders</h1>
+                        <h1 className='mt-10 font-bold text-4xl'>Releasing Cake Orders</h1>
                         <div>
                             <label className="font-semibold text-xl">Filter Items:</label>
                             <select id="combo-box" className="mt-12 h-10 px-3 rounded border border-black" value={selectedOption} onChange={handleSelectChange}  >
@@ -238,4 +233,4 @@ const TodayOrders = () => {
     );
 };
 
-export default TodayOrders;
+export default ReleaseOrders;

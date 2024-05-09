@@ -3,51 +3,46 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import Swal from 'sweetalert2';
+import { useParams } from 'react-router-dom';
 
-const TodayOrders = () => {
+const BranchTodayOrders = () => {
     const [items, setItems] = useState([]);
     const [orders, setOrders] = useState([]);
     const [showAllOrders, setShowAllOrders] = useState(false);
     const [showOrdersToPrepare, setShowOrdersToPrepare] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
+    const {branchId} =useParams();
 
     useEffect(() => {   
         setSelectedOption('Customize Orders');       
         handleAllOrders();
+        // console.log(branchId);
         
     },[]);
 
     const handleAllOrders = async () => {
+        console.log(branchId);
         try {
-            const response = await axios.get('http://localhost:3001/server/order/CustomizeorderDetails'); 
+            const response = await axios.get(`http://localhost:3001/server/BranchEmployee/CustomizeDetails/${branchId}`);
             setItems(response.data.items);
             setShowAllOrders(true);
             setShowOrdersToPrepare(false);
-          } catch (error) {
-            console.error('Error fetching items:', error);
-            Swal.fire({
-                icon: 'info',
-                title: 'No Customize Orders Today',
-                text: 'There are currently no Picture orders to Release.',
-            });
-            setSelectedOption('');
-          }
-        };
+
+        } catch (error) {
+            console.error('Error fetching item details:', error);
+        }
+    };
+        
         const handleOrdersToPrepare = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/server/order/pictureUploadingOrderDetails'); 
+                const response = await axios.get(`http://localhost:3001/server/BranchEmployee/PictureDetails/${branchId}`);
                 setOrders(response.data.items);
-                setShowOrdersToPrepare(true);
                 setShowAllOrders(false);
-              } catch (error) {
-                console.error('Error fetching items:', error);
-                Swal.fire({
-                    icon: 'info',
-                    title: 'No Customize Orders Today',
-                    text: 'There are currently no Picture orders to Release.',
-                });
-                setSelectedOption('Customize Orders');
-              }
+                setShowOrdersToPrepare(true);
+    
+            } catch (error) {
+                console.error('Error fetching item details:', error);
+            }
         };
         const updateStatus = async (orderId) => {
             console.log(orderId);
@@ -167,7 +162,7 @@ const TodayOrders = () => {
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.cakeText}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.branchName}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            <button className='rounded-xl w-20 text-white font-bold' disabled={item.status === "Released"} style={{ backgroundColor: item.status === "Released" ? "grey" : "blue" }} onClick={() => updateStatus(item.orderId)}>Release</button>
+                                            <button className='rounded-xl w-20 text-white font-bold' disabled={item.status !== "Released"} style={{ backgroundColor: item.status !== "Released" ? "grey" : "blue" }} onClick={() => updateStatus(item.orderId)}>Send</button>
                                         </td>
                                     </tr>
                                 ))}
@@ -186,7 +181,7 @@ const TodayOrders = () => {
                                     <th className="border border-gray-400 px-4 py-3">Pickup Date</th>
                                     <th className="border border-gray-400 px-12 py-3">Cake Text</th>
                                     <th className="border border-gray-400 px-8 py-3">Branch Name</th>
-                                    <th className="border border-gray-400 px-8 py-3">Release</th>
+                                    <th className="border border-gray-400 px-8 py-3">Sms</th>
                                 </tr>
                             </thead>
                             <tbody className='flex-row justify-center items-center'>
@@ -206,7 +201,7 @@ const TodayOrders = () => {
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.cakeText}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.branchName}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            <button className='rounded-xl w-20 text-white font-bold ' disabled={item.status === "Released" && item.status === "Completed"} style={{ backgroundColor: item.status === "Released" ? "grey" : "blue" }} onClick={() => updatePicStatus(item.picOrderId)}>Release</button>
+                                            <button className='rounded-xl w-20 text-white font-bold ' disabled={item.status !== "Released"} style={{ backgroundColor: item.status !== "Released" ? "grey" : "blue" }} onClick={() => updatePicStatus(item.picOrderId)}>Send</button>
                                         </td>
                                     </tr>
                                 ))}
@@ -238,4 +233,4 @@ const TodayOrders = () => {
     );
 };
 
-export default TodayOrders;
+export default BranchTodayOrders;

@@ -16,6 +16,7 @@ import feedbackRoutes from './Routes/feedback.js'
 import stockManagementRoutes from './Routes/stockManagement.js'
 import customizeCake from './Routes/customizeCake.js'
 import pictureUploading from './Routes/pictureUploading.js'
+import branchEmployee from './Routes/BranchEmployee.js'
 import order from './Routes/order.js'
 import multer from 'multer'
 import path from 'path'
@@ -42,6 +43,7 @@ app.use('/server/stockManagement',stockManagementRoutes);
 app.use('/server/customizeCake',customizeCake)
 app.use('/server/pictureUploading',pictureUploading);
 app.use('/server/order',order);
+app.use('/server/BranchEmployee',branchEmployee);
 
 
 app.listen(3001, () => {
