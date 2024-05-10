@@ -1,5 +1,6 @@
 import  { useState, useEffect } from 'react';
 import image9 from '../assets/images/Vector (3).png';
+import { IoNotificationsOutline } from 'react-icons/io5';
 import image10 from '../assets/images/image 10.png';
 import image4 from '../assets/images/image_4-removebg-preview 1.png';
 import image8 from '../assets/images/image 8.png';
@@ -21,6 +22,7 @@ const FactoryEmployee = () => {
     const [showLogoutPopup, setShowLogoutPopup] = useState(false);
     const navigate = useNavigate();
     const [selectedInterface, setSelectedInterface] = useState('customizeCakeOrder');
+    const [newNotifications, setNewNotifications] = useState(0);
 
 
     useEffect(() => {
@@ -36,6 +38,9 @@ const FactoryEmployee = () => {
 
     const handleLogout = () => {
         setShowLogoutPopup(true);
+    };
+    const handleNewNotification = () => {
+        setNewNotifications(prevCount => prevCount + 1);
     };
 
     const handleConfirmLogout = () => {
@@ -56,12 +61,15 @@ const FactoryEmployee = () => {
             <div className="flex w-full h-16 bg-custom-blue items-center text-white justify-between">
                 <h1 className='ml-5 font-bold text-2xl'>{dateTime.toLocaleDateString()}</h1>
                 <h1 className='ml-5 font-bold text-2xl'>{dateTime.toLocaleTimeString()}</h1>
+                
                 <div className='mr-10 flex items-center'>
+                    <IoNotificationsOutline className="mr-2 w-8 h-8 cursor-pointer" onClick={handleNewNotification} /> 
                     <img src={image9} alt='Icon' className='mr-2 w-10 h-10' /> 
                     <div className='flex flex-col'> 
                         <h1 className='font-bold text-1xl'>Mr.Pramuddhika</h1> 
                         <h1 className='font-bold text-1xl'>Stock Keeper</h1> 
                     </div>
+                    {newNotifications > 0 && <div className="ml-2 bg-red-500 text-white px-2 py-1 rounded-full">{newNotifications}</div>}
                 </div>
             </div>
             <div className="flex flex-row flex-grow">
