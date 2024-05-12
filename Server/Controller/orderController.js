@@ -282,7 +282,7 @@ export const updatePicOrderStatus = async (req, res) => {
 export const getTodayCustomOrderDetails = async (req, res) => {
     try {
         const items = await new Promise((resolve, reject) => {
-            db.query('SELECT o.orderId,o.name,o.contact,o.quantity,o.pickupDate,o.status,o.cakeText,b.branchName AS branchName FROM orders o JOIN branch b ON o.branchId = b.branchId JOIN  cake c ON o.cakeId = c.CID WHERE DATE(o.pickupDate) = CURDATE() AND o.status != "Completed"', (error, results) => {
+            db.query('SELECT o.orderId,o.name,o.contact,o.quantity,o.pickupDate,o.status,o.cakeText,b.branchName AS branchName FROM orders o JOIN branch b ON o.branchId = b.branchId JOIN  cake c ON o.cakeId = c.CID WHERE DATE(o.pickupDate) = CURDATE() AND o.status != "Completed" AND o.status != "Deleted"', (error, results) => {
                 if (error) {
                     reject(error);
                 } else {
@@ -332,7 +332,7 @@ export const updateOrderReleseStatus = async (req, res) => {
 export const getTodayPictureOrderDetails = async (req, res) => {
     try {
         const items = await new Promise((resolve, reject) => {
-            db.query('SELECT o.picOrderId,o.name,o.contact,o.quantity,o.pickupDate,o.status,o.cakeText,b.branchName AS branchName FROM picUploadingOrders o JOIN branch b ON o.branchId = b.branchId  WHERE DATE(o.pickupDate) = CURDATE() AND status != "Completed"', (error, results) => {
+            db.query('SELECT o.picOrderId,o.name,o.contact,o.quantity,o.pickupDate,o.status,o.cakeText,b.branchName AS branchName FROM picUploadingOrders o JOIN branch b ON o.branchId = b.branchId  WHERE DATE(o.pickupDate) = CURDATE() AND status != "Completed" AND status != "Deleted"', (error, results) => {
                 if (error) {
                     reject(error);
                 } else {
