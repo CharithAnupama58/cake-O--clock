@@ -15,6 +15,8 @@ const CustomizeOrder = () => {
     useEffect(() => {    
         setSelectedOption('All Orders');      
         handleAllOrders();
+
+        // setInterval(handleAllOrders, 5000);
         
         
     },[]);

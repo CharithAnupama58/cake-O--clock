@@ -125,35 +125,34 @@ async function generateNewOrderId() {
 }
 
 export const placeCustomizeOrder = async (req, res) => {
-    const { Name, Contact,Quantity,formattedDate,additionalText,PickupDate,cakeId,branchID } = req.body;
-    const orderId=await generateNewOrderId();
-    const status='Pending';
-    console.log(orderId);
-    console.log(req.body);
-    
+    const { Name, Contact, Quantity, formattedDate, additionalText, PickupDate, cakeId, branchID } = req.body;
+    const orderId = await generateNewOrderId();
+    const status = 'Pending';
+    const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-    if (!orderId||!Name|| !Contact||!Quantity||!formattedDate||!additionalText||!PickupDate||!cakeId||!branchID) {
-        return res.status(400).json({ error: 'ItemId, Quantity, and ExpiryDate are required' });
+    if (!orderId || !Name || !Contact || !Quantity || !formattedDate || !additionalText || !PickupDate || !cakeId || !branchID) {
+        return res.status(400).json({ error: 'Missing required fields' });
     }
 
     try {
-            const InsertResult = await new Promise((resolve, reject) => {
-                db.query('INSERT INTO Orders (orderId, name, contact, quantity, orderDate, cakeText, pickupDate, cakeId, status, branchId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [orderId,Name, Contact,Quantity,formattedDate,additionalText,PickupDate,cakeId,status,branchID], (error, result) => {
-                    if (error) {
-                        reject(error);
-                    }
-                    resolve(result);
-                });
+        const InsertResult = await new Promise((resolve, reject) => {
+            db.query('INSERT INTO Orders (orderId, name, contact, quantity, orderDate, cakeText, pickupDate, cakeId, status, branchId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [orderId, Name, Contact, Quantity, formattedDate, additionalText, PickupDate, cakeId, status, branchID], (error, result) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(result);
             });
+        });
 
-            if (InsertResult.affectedRows >= 1) {
-                return res.status(200).json({ message: 'Stock details updated successfully' });
-            } else {
-                return res.status(500).json({ error: 'Failed to update stock details' });
-            }
-        
+        if (InsertResult.affectedRows >= 1) {
+            // Insert notification into the notification table with date and time
+            db.query('INSERT INTO notification (order_id, message, created_at) VALUES (?, ?, ?)', [orderId, 'New order placed', createdAt]);
+            return res.status(200).json({ message: 'Order placed successfully' });
+        } else {
+            return res.status(500).json({ error: 'Failed to place order' });
+        }
     } catch (error) {
-        console.log('Error saving stock details:', error);
+        console.error('Error placing order:', error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 };

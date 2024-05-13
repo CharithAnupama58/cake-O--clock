@@ -8,11 +8,12 @@ const TemporaryOrders = () => {
     const [items, setItems] = useState([]);
 
     useEffect(() => {          
-        handleAllOrders();
+        handleAllTempOrders();
         
+        // setInterval(handleAllTempOrders, 5000);
     }, []);
 
-    const handleAllOrders = async () => {
+    const handleAllTempOrders = async () => {
         try {
             const response = await axios.get('http://localhost:3001/server/order/AllTemporaryOrderDetails'); 
             setItems(response.data.items);
@@ -61,7 +62,7 @@ const TemporaryOrders = () => {
 
         if (response.status === 200) {
             
-            handleAllOrders();
+            handleAllTempOrders();
             // navigate(`/CustomizeCake2/${cakeId}/${additionalText}`);
         } else {
             console.error('Invalid username or password');

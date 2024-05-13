@@ -12,6 +12,7 @@ import CustomizeCake2  from './views/customizeCake2'
 import PictureUploading  from './views/pictureUploading'
 import PictureUploading2  from './views/pictureUploading2'
 import BranchEmployee from './views/BranchEmployee'
+import AdminBoard from './views/AdminDashBoard'
 import { createBrowserRouter,RouterProvider } from 'react-router-dom'
 
 const router=createBrowserRouter([
@@ -58,6 +59,10 @@ const router=createBrowserRouter([
   {
     path:'/BranchEmployee/:branchId',
     element:<BranchEmployee/>
+  },
+  {
+    path:'/AdminDashBoard',
+    element:<AdminBoard/>
   },
 ])
 

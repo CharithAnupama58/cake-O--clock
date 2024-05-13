@@ -17,6 +17,7 @@ import stockManagementRoutes from './Routes/stockManagement.js'
 import customizeCake from './Routes/customizeCake.js'
 import pictureUploading from './Routes/pictureUploading.js'
 import branchEmployee from './Routes/BranchEmployee.js'
+import admin from './Routes/adminBoard.js'
 import order from './Routes/order.js'
 import multer from 'multer'
 import path from 'path'
@@ -44,6 +45,9 @@ app.use('/server/customizeCake',customizeCake)
 app.use('/server/pictureUploading',pictureUploading);
 app.use('/server/order',order);
 app.use('/server/BranchEmployee',branchEmployee);
+app.use('/server/admin',admin);
+
+
 
 
 app.listen(3001, () => {
@@ -98,6 +102,18 @@ app.post('/uploads', upload.single('image'), async (req, res) => {
     console.log('Image URL:', imageUrl);
     res.json({ imageUrl });
 
+});
+
+app.get('/check-notifications', (req, res) => {
+  
+  db.query('SELECT * FROM notifications WHERE created_at > ?', [req.query.lastCheckedTime], (error, results) => {
+    if (error) {
+      console.error('Error querying notifications:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json(results);
+    }
+  });
 });
 
 // Serve uploaded images statically

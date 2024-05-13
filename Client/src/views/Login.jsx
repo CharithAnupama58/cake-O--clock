@@ -31,6 +31,8 @@ const Login = () => {
                     navigate('/FactoryEmployee');
                 } else if (jobRole === 'Branch Employee') {
                     navigate(`/BranchEmployee/${branchId}`);
+                }else if (jobRole === 'Admin') {
+                    navigate('/AdminDashBoard');
                 }
             } else {
                 // If login fails, display error message

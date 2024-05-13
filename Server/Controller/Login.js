@@ -2,6 +2,7 @@
 // const bcrypt = require('bcrypt');
 // import bcrypt from 'bcrypt'
 import {db} from '../server.js'
+import bcrypt from 'bcrypt';
  
 
 
@@ -42,9 +43,10 @@ import {db} from '../server.js'
 
 // module.exports = { login };
 
-export const login=(req,res)=>{
 
-        const { username, password } = req.body;
+
+export const login = (req, res) => {
+    const { username, password } = req.body;
 
     if (!username || !password) {
         return res.status(400).json({ error: 'Username and password are required' });
@@ -57,22 +59,29 @@ export const login=(req,res)=>{
                 console.error('Error during login:', err);
                 return res.status(500).json({ error: 'Internal Server Error', details: err.message });
             }
-    
+
             if (results.length === 0) {
                 return res.status(401).json({ error: 'Invalid username or password' });
             }
-    
-            if (password !== results[0].password) {
+
+            const user = results[0];
+
+            // Compare the provided password with the encrypted password from the database
+            const passwordMatch = await bcrypt.compare(password, user.password);
+
+            if (!passwordMatch) {
                 return res.status(401).json({ error: 'Invalid username or password' });
             }
+
             // Login successful
-            console.log(results[0].jobRole);
-            const { jobRole,branchId } = results[0];
-            res.status(200).json({ message: 'Login successful' ,jobRole,branchId});
+            console.log(user.jobRole);
+            const { jobRole, branchId } = user;
+            res.status(200).json({ message: 'Login successful', jobRole, branchId });
         });
     } catch (error) {
         console.error('Error during login:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
 
