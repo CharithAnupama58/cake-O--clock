@@ -8,7 +8,7 @@ router.get('/cakeTypes', async (req, res) => {
     await getCakeTypes(req, res);
 });
 
-router.get('/icingFlavour', async (req, res) => {
+router.get('/icingFlavour/:selectedOption2', async (req, res) => {
     await getIcingFlavour(req, res);
 });
 

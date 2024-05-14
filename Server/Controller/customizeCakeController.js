@@ -24,9 +24,11 @@ export const getCakeTypes = async (req, res) => {
 };
 
 export const getIcingFlavour = async (req, res) => {
+    const {selectedOption2} = req.params
+    console.log(selectedOption2);
     try {
         const options = await new Promise((resolve, reject) => {
-            db.query('SELECT DISTINCT icingType FROM cake', (error, results) => {
+            db.query('SELECT icingType FROM cake WHERE cakeType = ?',[selectedOption2], (error, results) => {
                 if (error) {
                     reject(error);
                 } else {

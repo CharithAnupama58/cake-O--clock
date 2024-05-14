@@ -24,9 +24,10 @@ export const CustomizeCake = () => {
           console.error('Error fetching options:', error);
         }
       };
-      const fetchOptions1 = async () => {
+      const fetchOptions1 = async (selectedOption2) => {
+        console.log(selectedOption2);
         try {
-          const response = await axios.get('http://localhost:3001/server/customizeCake/icingFlavour'); 
+          const response = await axios.get(`http://localhost:3001/server/customizeCake/icingFlavour/${selectedOption2}`); 
           setOptions1(response.data.options);
         //   console.log(response.data.options);
         } catch (error) {
@@ -35,9 +36,9 @@ export const CustomizeCake = () => {
       };
       useEffect(() => {
         fetchOptions();
-        fetchOptions1();
-        console.log(selectedOption);
-        console.log(selectedOption1); 
+        // fetchOptions1();
+        // console.log(selectedOption);
+        // console.log(selectedOption1); 
         if(selectedOption && selectedOption1){
             fetchCakeDetails();
         }
@@ -46,6 +47,7 @@ export const CustomizeCake = () => {
 
     const handleSelectChange = (event) => {
         setSelectedOption(event.target.value);
+        fetchOptions1(event.target.value);
     };
 
     const handleSelectChange1 = (event) => {
