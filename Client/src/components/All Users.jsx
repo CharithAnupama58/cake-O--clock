@@ -122,7 +122,7 @@ const confirmDelete = (userId) => {
     return (
         <div className='flex flex-row w-full justify-center'>
             <div className='flex flex-col items-center'>
-                        <h1 className='mt-10 font-bold text-4xl'>Temporary Cake Orders</h1>
+                        <h1 className='mt-10 font-bold text-4xl'>All Users</h1>
                         {renderTable()}
                         
                         <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6' disabled={items.length === 0}  onClick={handleDownload}>Download Report</button>

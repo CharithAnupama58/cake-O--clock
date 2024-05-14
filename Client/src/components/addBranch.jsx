@@ -69,7 +69,7 @@ const AddBranch = () => {
                                     <input type="text" id="input2" className="w-full h-10 px-3 rounded border border-black" placeholder="Branch Name" value={branchName} onChange={(e) => setBranchName(e.target.value)} />
                                 </div>
 
-                            <button className=' bg-custom-blue text-white font-bold rounded-xl mt-8 ml-20 py-1 px-6'>Add User</button>
+                            <button className=' bg-custom-blue text-white font-bold rounded-xl mt-8 ml-20 py-1 px-6'>Add Branch</button>
                         </form>
                     </div>
             

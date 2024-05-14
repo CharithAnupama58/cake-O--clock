@@ -8,6 +8,7 @@ import image14 from '../assets/images/images 14.png';
 import AddUser from '../components/addUser';
 import AllUsers from '../components/All Users';
 import AddBranch from '../components/addBranch';
+import AddCake from '../components/addNewCake';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -90,7 +91,7 @@ const AdminDashBoard = () => {
                         </button>
                     
                         <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('todaysOrder')}> 
+                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('addNewCake')}> 
                                 <img src={image11} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>Add New Cake</h1>   
                             </div>
@@ -106,6 +107,7 @@ const AdminDashBoard = () => {
                     {selectedInterface === 'addUser' && <AddUser />}
                     {selectedInterface === 'allUsers' && <AllUsers />}
                     {selectedInterface === 'addBranch' && <AddBranch />}
+                    {selectedInterface === 'addNewCake' && <AddCake />}
                 </div>
                 
             </div>

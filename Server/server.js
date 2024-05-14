@@ -86,7 +86,8 @@ app.listen(3001, () => {
 // });
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './uploads'); 
+    cb(null, './uploads');
+    cb(null, './cakes'); 
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname); 
@@ -94,6 +95,8 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+
+
 
 
 app.post('/uploads', upload.single('image'), async (req, res) => {
@@ -104,17 +107,16 @@ app.post('/uploads', upload.single('image'), async (req, res) => {
 
 });
 
-app.get('/check-notifications', (req, res) => {
-  
-  db.query('SELECT * FROM notifications WHERE created_at > ?', [req.query.lastCheckedTime], (error, results) => {
-    if (error) {
-      console.error('Error querying notifications:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      res.json(results);
-    }
-  });
+app.post('/cakes', upload.single('image'), async (req, res) => {
+  const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    console.log('Uploaded file:', req.file);
+    console.log('Image URL:', imageUrl);
+    res.json({ imageUrl });
+
 });
+
+
 
 // Serve uploaded images statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/cakes', express.static(path.join(__dirname, 'Cakes')));
