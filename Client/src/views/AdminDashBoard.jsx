@@ -4,9 +4,10 @@ import image4 from '../assets/images/image_4-removebg-preview 1.png';
 import image8 from '../assets/images/image 8.png';
 import image12 from '../assets/images/image 9.png';
 import image11 from '../assets/images/image 11.png';
-import image13 from '../assets/images/image 13.png';
 import image14 from '../assets/images/images 14.png';
 import AddUser from '../components/addUser';
+import AllUsers from '../components/All Users';
+import AddBranch from '../components/addBranch';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -76,13 +77,13 @@ const AdminDashBoard = () => {
                             </div>
                         </button>
                         <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl `}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('pictureUploadingCakeOrder')}> 
+                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('allUsers')}> 
                                 <img src={image12} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>All Users</h1>   
                             </div>
                         </button>
                         <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('temporaryOrders')}> 
+                            <div className='flex w-56 h-12 bg-white items-center justify-around border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('addBranch')}> 
                                 <img src={image14} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>Add Branch</h1>   
                             </div>
@@ -103,6 +104,8 @@ const AdminDashBoard = () => {
                 </div>
                 <div className="flex flex-col items-center text-black flex-grow">
                     {selectedInterface === 'addUser' && <AddUser />}
+                    {selectedInterface === 'allUsers' && <AllUsers />}
+                    {selectedInterface === 'addBranch' && <AddBranch />}
                 </div>
                 
             </div>

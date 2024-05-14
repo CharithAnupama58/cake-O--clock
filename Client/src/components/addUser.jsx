@@ -98,10 +98,13 @@ const AddUser = () => {
 
             if (response.status === 200) {
                 alert('Feedback submitted successfully');
-                // setFirtName('');
-                // setNewItemName('');
-                // setnewItemMeasureUnit('');
-                // setnewItemUnitQty('');  
+                setFirtName('');
+                setLastName('');
+                setSelectedOption1('');
+                setUserName('');
+                setPassword('');
+                setBranchID('');
+                setSelectedOption('');
                 generateNewItemIdFromBackend();
             } else {
                 console.error('Invalid username or password');
