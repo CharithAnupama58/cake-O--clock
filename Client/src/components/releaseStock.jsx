@@ -54,6 +54,7 @@ const ReleaseStock = () => {
             console.error('Error fetching item details:', error);
         }
     };
+    
     const fetchStockQty = async () => {
         if (!ItemId) {
             console.error('ItemId is not defined');
@@ -105,6 +106,11 @@ const ReleaseStock = () => {
 
     const handleSelectChange = (event) => {
         setSelectedOption(event.target.value);
+        setItemId('');
+        setStockQty('');
+        setReleaseQty('');
+        setSelectedOption1('');
+        setItemNameDetails([]);
     };
     const handleSelectChange1 = (event) => {
         setSelectedOption1(event.target.value);
@@ -116,6 +122,7 @@ const ReleaseStock = () => {
             handleAddStockSubmit(event);
         }
     };
+    
     // const handleInputChanges = (event) => {
     //     const { value } = event.target;
     //     const selectedItem = itemNameDetails.find(item => item.itemName === value);
@@ -168,12 +175,16 @@ const ReleaseStock = () => {
                                 </div>
                                 <div className="mb-6 flex items-center">
                                     <label htmlFor="combo-box" className="block text-xl w-60 mr-4">Exp Date:</label>
-                                    <select id="combo-box" className="w-full h-10 px-3 rounded border border-black" value={selectedOption1} onChange={handleSelectChange1}  >
+                                    <select id="combo-box" className="w-full h-10 px-3 rounded border border-black" value={selectedOption1} onChange={handleSelectChange1}>
                                         <option value="">Select an option...</option>
-                                        {ExpioryDates.map((date, index) => ( 
-                                            <option key={index} >{date.ExpiryDate}</option>
-                                        ))};
+                                        {ExpioryDates.map((dateObj, index) => { 
+                                            const date = new Date(dateObj.ExpiryDate);
+                                            date.setDate(date.getDate() + 1);
+                                            const formattedDate = date.toISOString().split('T')[0];
+                                            return <option key={index}>{formattedDate}</option>;
+                                        })}
                                     </select>
+
                                 </div>
                                 
                                 {itemNameDetails.map((details, index) => ( 

@@ -24,22 +24,22 @@ const AllUsers = () => {
         };
     const handleDelete = async (userId) => {        
         console.log(userId);
-    try {
-        const response = await axios.post('http://localhost:3001/server/admin/deleteUser', {
-            userId,
-        });
+        try {
+            const response = await axios.post('http://localhost:3001/server/admin/deleteUser', {
+                userId,
+            });
 
-        if (response.status === 200) {
-            
-            handleAllTempOrders();
-            // navigate(`/CustomizeCake2/${cakeId}/${additionalText}`);
-        } else {
-            console.error('Invalid username or password');
+            if (response.status === 200) {
+                
+                handleAllTempOrders();
+                // navigate(`/CustomizeCake2/${cakeId}/${additionalText}`);
+            } else {
+                console.error('Invalid username or password');
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+            console.error('Failed to login. Please try again later.');
         }
-    } catch (error) {
-        console.error('Login failed:', error);
-        console.error('Failed to login. Please try again later.');
-    }
 };
 const confirmDelete = (userId) => {
     Swal.fire({

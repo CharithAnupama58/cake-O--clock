@@ -1,5 +1,5 @@
 import express from 'express';
-import { getItemDetails,getItemIds,getItemNameDetails,saveStockDetails,getItemExpiryDates,getStockQty,releaseStock,generateNewItemId,addItem,deleteItem,getExpiredStock } from '../Controller/stockManagementController.js';
+import { getItemDetails,getItemIds,getItemNameDetails,saveStockDetails,getItemExpiryDates,getStockQty,releaseStock,generateNewItemId,addItem,deleteItem,getExpiredStock, deleteExpireStock } from '../Controller/stockManagementController.js';
 
 const router = express.Router();
 
@@ -40,5 +40,8 @@ router.post('/addItem', async (req, res) => {
 });
 router.post('/deleteItem', async (req, res) => {
     await deleteItem(req, res);
+});
+router.post('/deleteStock', async (req, res) => {
+    await deleteExpireStock(req, res);
 });
 export default router;

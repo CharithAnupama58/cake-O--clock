@@ -152,6 +152,7 @@ export const getItemExpiryDates = async (req, res) => {
                 }
             });
         });
+        
         console.log(ExpioryDates)
 
         if (ExpioryDates.length > 0) {
@@ -394,6 +395,30 @@ export const getExpiredStock = async (req, res) => {
         }
     } catch (error) {
         console.log('Error fetching items:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+export const deleteExpireStock = async (req, res) => {
+    const { StockId} = req.body;
+    console.log(StockId);
+    try {
+            const InsertResult = await new Promise((resolve, reject) => {
+                db.query('DELETE FROM stock WHERE StockId = ?', [StockId], (error, result) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(result);
+                });
+            });
+
+            if (InsertResult.affectedRows >= 1) {
+                return res.status(200).json({ message: 'Stock details Deleted successfully' });
+            } else {
+                return res.status(500).json({ error: 'Failed to delete User details' });
+            }
+        
+    } catch (error) {
+        console.log('Error saving stock details:', error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 };

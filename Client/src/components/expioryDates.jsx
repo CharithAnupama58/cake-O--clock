@@ -1,36 +1,91 @@
 import  { useState, useEffect } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable'
+import 'jspdf-autotable';
+import Swal from 'sweetalert2';
 
 const ExpioryDates = () => {
     const [items, setItems] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
-        
-
-        const fetchItems = async () => {
-            try {
-              const response = await axios.get('http://localhost:3001/server/stockManagement/expiredStock'); 
-              setItems(response.data.items);
-            } catch (error) {
-              console.error('Error fetching items:', error);
-            }
-          };
-          
-        
-          
-          fetchItems();
+        fetchItems();
     },);
     const handleSearch = (e) => {
         setSearchQuery(e.target.value);
     };
+    const fetchItems = async () => {
+        try {
+          const response = await axios.get('http://localhost:3001/server/stockManagement/expiredStock'); 
+          setItems(response.data.items);
+        } catch (error) {
+          console.error('Error fetching items:', error);
+        }
+      };
+      const handleDelete = async (StockId) => {        
+        console.log(StockId);
+        try {
+            const response = await axios.post('http://localhost:3001/server/stockManagement/deleteStock', {
+                StockId,
+            });
+
+            if (response.status === 200) {
+                
+                fetchItems();
+                // navigate(`/CustomizeCake2/${cakeId}/${additionalText}`);
+            } else {
+                console.error('Invalid username or password');
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+            console.error('Failed to login. Please try again later.');
+        }
+    };
+    const confirmDelete = (StockId) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this item!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleDelete(StockId);
+                fetchItems();
+                Swal.fire(
+                    'Deleted!',
+                    'Your item has been deleted.',
+                    'success'
+                );
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire(
+                    'Cancelled',
+                    'Your item is safe :)',
+                    'error'
+                );
+            }
+        });
+    };
 
     const handleDownload = () => {
         const doc = new jsPDF();
+        const headingText = 'Cake O Clock(pvt) Ltd Expired Stock Report';
+        const fontSize = 16;
+        const textWidth = doc.getStringUnitWidth(headingText) * fontSize / doc.internal.scaleFactor;
+        const pageWidth = doc.internal.pageSize.width;
+        const xPos = (pageWidth - textWidth) / 2;
+        const yPos = 10; // Adjust the y-position of the heading
+
+        doc.setFontSize(fontSize);
+        doc.setFont('helvetica', 'bold');
+        doc.text(headingText, xPos, yPos);
+
+        const spaceHeight = 10;
+        const tableYPos = yPos + fontSize + spaceHeight;
         const table = document.getElementById('outOfStockTable');
-        doc.autoTable({ html: table });
+        doc.autoTable({ html: table, startY: tableYPos });
         doc.save('table.pdf');
 
     }
@@ -61,6 +116,7 @@ const ExpioryDates = () => {
                                         <th className="border border-gray-400 px-4 py-2">Unit Quantity</th>
                                         <th className="border border-gray-400 px-4 py-2">Quantity</th>
                                         <th className="border border-gray-400 px-12 py-2">Expiory Date</th>
+                                        <th className="border border-gray-400 px-12 py-2">Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody className='flex-row justify-center items-center'>
@@ -72,14 +128,23 @@ const ExpioryDates = () => {
                                             <td className="px-4  text-center border-r border-gray-400">{item.measureUnit}</td>
                                             <td className="px-4  text-center border-r border-gray-400">{item.unitQty}</td>
                                             <td className="px-4  text-center border-r border-gray-400">{item.Quantity}</td>
-                                            <td className="px-4  text-center border-r border-gray-400">{item.ExpiryDate}</td>
+                                            <td className="px-4  text-center border-r border-gray-400">
+                                                {(() => {
+                                                    const pickupDate = new Date(item.ExpiryDate);
+                                                    pickupDate.setDate(pickupDate.getDate() + 1);
+                                                    return pickupDate.toISOString().split('T')[0];
+                                                })()}
+                                            </td>
+                                            <td className="px-4 text-center border-r border-gray-400 py-3">
+                                                <button className='rounded-xl w-20 text-white font-bold bg-red' style={{ backgroundColor: "red" }} onClick={() => confirmDelete(item.StockId)}>Delete</button>
+                                            </td>
                                             </tr>
                                         ))}
                                 </tbody>
                             </table>
                         </div>
 
-                        <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6' onClick={handleDownload}>Download Report</button>
+                        <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6' disabled={filteredItems.length === 0} onClick={handleDownload}>Download Report</button>
                     </div>
             
         </div>
