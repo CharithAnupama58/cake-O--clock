@@ -84,19 +84,19 @@ const AddStock = () => {
                             
                                 <div  className="mb-8 flex items-center">
                                     <label htmlFor="input1" className="block text-xl w-60 mr-4">Item ID:</label>
-                                    <input type="text" id="input1" className="w-full h-10 px-3 rounded border border-black" placeholder="Item ID" value={itemNameDetails?.itemId||''} onChange={handleInputChanges}/>
+                                    <input type="text" id="input1" className="w-full h-10 px-3 rounded border border-black" placeholder="Item ID" value={itemNameDetails?.itemId||''} onChange={handleInputChanges} disabled/>
                                 </div>
                       
                             
                                 <div  className="mb-8 flex items-center">
                                     <label htmlFor="input2" className="block text-xl w-60 mr-4">Measure Unit:</label>
-                                    <input type="text" id="input2" className="w-full h-10 px-3 rounded border border-black" placeholder="Measure Unit" value={itemNameDetails?.measureUnit||''} />
+                                    <input type="text" id="input2" className="w-full h-10 px-3 rounded border border-black" placeholder="Measure Unit" value={itemNameDetails?.measureUnit||''} disabled />
                                 </div>
                            
                          
                                 <div  className="mb-8 flex items-center">
                                     <label htmlFor="input3" className="block text-xl w-60 mr-4">Unit Qty:</label>
-                                    <input type="text" id="input3" className="w-full h-10 px-3 rounded border border-black" placeholder="Unit Quantity" value={itemNameDetails?.unitQty||''}  />
+                                    <input type="text" id="input3" className="w-full h-10 px-3 rounded border border-black" placeholder="Unit Quantity" value={itemNameDetails?.unitQty||''} disabled />
                                 </div>
                            
                             
