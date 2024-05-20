@@ -1,4 +1,6 @@
 import {db} from '../server.js'
+import stripe from 'stripe';
+const stripeInstance = new stripe('sk_test_51PA220JMl6ygdWyRrpSO9uXv2f9pvvMkVxTjTqW0HuS8lIDVaTCC8ITNccAbCQIoVwTlY7QmwhreXQc7qh2HYXR100sxPvAiwL');
 
 export const getCakeTypes = async (req, res) => {
     try {
@@ -157,4 +159,47 @@ export const placeCustomizeOrder = async (req, res) => {
         console.error('Error placing order:', error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
+};
+
+export const getCakePrice = async (req, res) => {
+    const {cakeId} = req.params
+    try {
+        const options = await new Promise((resolve, reject) => {
+            db.query('SELECT price FROM cake WHERE CID = ?',[cakeId], (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        if (options.length > 0) {
+            return res.status(200).json({ options });
+        } else {
+            return res.status(404).json({ error: 'No items found' });
+        }
+    } catch (error) {
+        console.log('Error fetching items:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+export const createPaymentIntent = async (req, res) => {
+    const { lineItems } = req.body;
+
+  try {
+    const session = await stripeInstance.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: lineItems,
+      mode: 'payment',
+      success_url: 'http://localhost:5173/SuccessPage',
+      cancel_url: 'http://localhost:5173/CancelPage',
+    });
+
+    return res.json({ id: session.id });
+  } catch (error) {
+    console.error('Error creating checkout session:', error);
+    return res.status(500).json({ error: 'Failed to create checkout session' });
+  }
 };

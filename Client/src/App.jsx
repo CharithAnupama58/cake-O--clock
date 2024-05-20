@@ -13,6 +13,8 @@ import PictureUploading  from './views/pictureUploading'
 import PictureUploading2  from './views/pictureUploading2'
 import BranchEmployee from './views/BranchEmployee'
 import AdminBoard from './views/AdminDashBoard'
+import SuccessPage from './views/SuccessUrl'
+import CancelPage from './views/CancelUrl'
 import { createBrowserRouter,RouterProvider } from 'react-router-dom'
 
 const router=createBrowserRouter([
@@ -63,6 +65,14 @@ const router=createBrowserRouter([
   {
     path:'/AdminDashBoard',
     element:<AdminBoard/>
+  },
+  {
+    path:'/SuccessPage',
+    element:<SuccessPage/>
+  },
+  {
+    path:'/CancelPage',
+    element:<CancelPage/>
   },
 ])
 
