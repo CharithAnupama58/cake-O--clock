@@ -73,54 +73,71 @@ const CustomizeCake = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        let amount = parseFloat(price[0].price);
-        console.log(amount);
         try {
             const response = await axios.post('http://localhost:3001/server/customizeCake/payments', {
                 lineItems: [
                     { price_data: { currency: 'usd', product_data: { name: 'Customized Cake' }, unit_amount: parseFloat(price[0].price)*100 }, quantity: Quantity }
                 ]
             });
-
-            const sessionId = response.data.id;
-            console.log(sessionId);
-            
-
-            const stripe = await stripePromise;
-            const session = await stripe.redirectToCheckout({ sessionId });
-            const checkoutUrl = session.url;
-            const result = window.open(checkoutUrl, '_blank');
-            console.log(result);
-            if (sessionId !== null){
-                const today = new Date();
-                const formattedDate = today.toISOString().split('T')[0];
-                
-                // Send orderData to your backend to save to the database
-                const response = await axios.post('http://localhost:3001/server/customizeCake/placeCustomizeOrder', {
-                    Name,
-                    Contact,
-                    Quantity,
-                    formattedDate,
-                    additionalText,
-                    PickupDate,
-                    cakeId,
-                    branchID
-                });
-                if (response.status === 200) {
-                    alert('Feedback submitted successfully');
-                    setName('');
-                    setContact('');
-                    setQuantity('');
-                    setPickupDate('');
-                    setSelectedOption('');
-                } else {
-                    console.error('Invalid username or password');
+    
+            const { id: sessionId, url: checkoutUrl } = response.data;
+            window.open(checkoutUrl, '_blank');
+    
+            // Periodically check the payment status
+            const checkPaymentStatus = setInterval(async () => {
+                try {
+                    const updatedSession = await axios.get(`http://localhost:3001/server/customizeCake/paymentStatus/${sessionId}`);
+                    console.log(updatedSession);
+                    if (updatedSession.data.payment_status === 'paid') {
+                        clearInterval(checkPaymentStatus); // Stop checking the payment status
+                        // Payment is successful, update UI or perform any necessary actions
+                        console.log('Payment successful');
+                        // Now you can save order details to the database
+                        saveOrderDetails();
+                    } else if (updatedSession.data.payment_status === 'canceled') {
+                        clearInterval(checkPaymentStatus); // Stop checking the payment status
+                        // Payment is canceled, update UI or perform any necessary actions
+                        console.log('Payment canceled');
+                    }
+                } catch (error) {
+                    console.error('Error checking payment status:', error);
                 }
-            }
+            }, 3000); // Check payment status every 3 seconds
         } catch (error) {
             console.error('Error processing payment:', error);
         }
     };
+    
+    const saveOrderDetails = async () => {
+        try {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            const response = await axios.post('http://localhost:3001/server/customizeCake/placeCustomizeOrder', {
+                Name,
+                Contact,
+                Quantity,
+                formattedDate,
+                additionalText,
+                PickupDate,
+                cakeId,
+                branchID
+            });
+            if (response.status === 200) {
+                alert('Order placed successfully');
+                setName('');
+                setContact('');
+                setQuantity('');
+                setPickupDate('');
+                setSelectedOption('');
+            } else {
+                console.error('Failed to place order:', response.data.message);
+            }
+        } catch (error) {
+            console.error('Error saving order details:', error);
+        }
+    };
+    
+    
 
     return (
         <div className='flex h-screen w-screen justify-between'>

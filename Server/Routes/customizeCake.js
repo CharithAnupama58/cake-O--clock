@@ -1,5 +1,5 @@
 import express from 'express';
-import {getCakeTypes,getIcingFlavour,getCakeDetails,getBranchIds,placeCustomizeOrder, getCakePrice, createPaymentIntent} from '../Controller/customizeCakeController.js'
+import {getCakeTypes,getIcingFlavour,getCakeDetails,getBranchIds,placeCustomizeOrder, getCakePrice, createPaymentIntent, loadSessionId} from '../Controller/customizeCakeController.js'
 
 
 const router = express.Router();
@@ -21,11 +21,15 @@ router.get('/branchIds', async (req, res) => {
 router.get('/cakePrice/:cakeId', async (req, res) => {
     await getCakePrice(req, res);
 });
+router.get('/paymentStatus/:sessionId', async (req, res) => {
+    await loadSessionId(req,res);
+});
 router.post('/placeCustomizeOrder', async (req, res) => {
     await placeCustomizeOrder(req, res);
 });
 router.post('/payments', async (req, res) => {
     await createPaymentIntent(req, res);
 });
+
 
 export default router;

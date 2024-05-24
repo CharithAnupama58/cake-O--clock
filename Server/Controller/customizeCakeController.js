@@ -197,9 +197,20 @@ export const createPaymentIntent = async (req, res) => {
       cancel_url: 'http://localhost:5173/CancelPage',
     });
 
-    return res.json({ id: session.id });
+    return res.json({ id: session.id, url: session.url });
   } catch (error) {
     console.error('Error creating checkout session:', error);
     return res.status(500).json({ error: 'Failed to create checkout session' });
   }
+};
+
+export const loadSessionId= async (req, res) => {
+    // console.log(req.params.sessionId)
+    try {
+        const session = await stripeInstance.checkout.sessions.retrieve(req.params.sessionId);
+        console.log(session);
+        res.json({ payment_status: session.payment_status });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
