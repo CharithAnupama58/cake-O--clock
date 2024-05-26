@@ -10,7 +10,7 @@ import radiobtn1 from '../assets/images/Group 127 (1).png';
 const stripePromise = loadStripe('pk_test_51PA220JMl6ygdWyRGPa5J7T8DstAqNdfoU9wBJQMaCZHr1UwfP8TLd6zKoQncfWBaAIVrWDudl388EJvkWuoj0Ua00pm2Lz2DH');
 
 const CustomizeCake = () => {
-    const { cakeId, additionalText } = useParams();
+    const { cakeId, additionalText,finalPrice,selectedOption2 } = useParams();
     const [options, setOptions] = useState([]);
     const [selectedOption, setSelectedOption] = useState('');
     const [Name, setName] = useState('');
@@ -32,18 +32,10 @@ const CustomizeCake = () => {
         }
     };
 
-    const fetchCakePrice = async () => {
-        try {
-            const response = await axios.get(`http://localhost:3001/server/customizeCake/cakePrice/${cakeId}`);
-            setPrice(response.data.options);
-        } catch (error) {
-            console.error('Error fetching options:', error);
-        }
-    };
-
+    
     useEffect(() => {
+        setPrice(finalPrice);
         fetchOptions();
-        fetchCakePrice();
     }, []);
 
     const handleSelectChange = (event) => {
@@ -73,10 +65,11 @@ const CustomizeCake = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        console.log(price);
         try {
             const response = await axios.post('http://localhost:3001/server/customizeCake/payments', {
                 lineItems: [
-                    { price_data: { currency: 'usd', product_data: { name: 'Customized Cake' }, unit_amount: parseFloat(price[0].price)*100 }, quantity: Quantity }
+                    { price_data: { currency: 'usd', product_data: { name: 'Customized Cake' }, unit_amount: parseFloat(price)*100 }, quantity: Quantity }
                 ]
             });
     
@@ -120,7 +113,8 @@ const CustomizeCake = () => {
                 additionalText,
                 PickupDate,
                 cakeId,
-                branchID
+                branchID,
+                selectedOption2
             });
             if (response.status === 200) {
                 alert('Order placed successfully');

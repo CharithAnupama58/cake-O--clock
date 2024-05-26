@@ -129,18 +129,18 @@ async function generateNewOrderId() {
 }
 
 export const placeCustomizeOrder = async (req, res) => {
-    const { Name, Contact, Quantity, formattedDate, additionalText, PickupDate, cakeId, branchID } = req.body;
+    const { Name, Contact, Quantity, formattedDate, additionalText, PickupDate, cakeId, branchID, selectedOption2} = req.body;
     const orderId = await generateNewOrderId();
     const status = 'Pending';
     const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-    if (!orderId || !Name || !Contact || !Quantity || !formattedDate || !additionalText || !PickupDate || !cakeId || !branchID) {
+    if (!orderId || !Name || !Contact || !Quantity || !formattedDate || !additionalText || !PickupDate || !cakeId || !branchID || !selectedOption2) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
     try {
         const InsertResult = await new Promise((resolve, reject) => {
-            db.query('INSERT INTO Orders (orderId, name, contact, quantity, orderDate, cakeText, pickupDate, cakeId, status, branchId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [orderId, Name, Contact, Quantity, formattedDate, additionalText, PickupDate, cakeId, status, branchID], (error, result) => {
+            db.query('INSERT INTO Orders (orderId, name, contact, quantity, orderDate, cakeText, pickupDate, cakeId, status, branchId, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [orderId, Name, Contact, Quantity, formattedDate, additionalText, PickupDate, cakeId, status, branchID,selectedOption2], (error, result) => {
                 if (error) {
                     reject(error);
                 }

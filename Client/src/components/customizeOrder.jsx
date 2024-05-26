@@ -189,15 +189,16 @@ const CustomizeOrder = () => {
                 <table className="table-auto border border-collapse border-gray-400 mt-10" id='orderPrepareTable'>
                     <thead>
                                 <tr>
-                                    <th className="border border-gray-400 px-5 py-3">Order ID</th>
+                                    <th className="border border-gray-400 px-1 py-3">Order ID</th>
                                     <th className="border border-gray-400 px-10 py-3">Name</th>
-                                    <th className="border border-gray-400 px-12 py-3">Contact</th>
-                                    <th className="border border-gray-400 px-2 py-3">Quantity</th>
-                                    <th className="border border-gray-400 px-4 py-3">Pickup Date</th>
-                                    <th className="border border-gray-400 px-4 py-3">Image Link</th>
+                                    <th className="border border-gray-400 px-4 py-3">Contact</th>
+                                    <th className="border border-gray-400 px-1 py-3">Quantity</th>
+                                    <th className="border border-gray-400 px-2 py-3">Pickup Date</th>
+                                    <th className="border border-gray-400 px-2 py-3">Image Link</th>
                                     <th className="border border-gray-400 px-12 py-3">Cake Text</th>
                                     <th className="border border-gray-400 px-8 py-3">Status</th>
-                                    <th className="border border-gray-400 px-8 py-3">Prepare</th>
+                                    <th className="border border-gray-400 px-4 py-3">Size</th>
+                                    <th className="border border-gray-400 px-4 py-3">Prepare</th>
                                 </tr>
                             </thead>
                             <tbody className='flex-row justify-center items-center'>
@@ -220,6 +221,7 @@ const CustomizeOrder = () => {
                                         </td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.cakeText}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.status}</td>
+                                        <td className="px-4 text-center border-r border-gray-400 py-3">{item.size}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">
                                             <button className='rounded-xl w-20' disabled={item.status === "Preparing"} style={{ backgroundColor: item.status === "Preparing" ? "grey" : "blue" }} onClick={() => updateStatus(item.orderId)}>Prepare</button>
                                         </td>

@@ -40,7 +40,7 @@ const router=createBrowserRouter([
 
   },
   {
-    path:'/CustomizeCake2/:cakeId/:additionalText',
+    path:'/CustomizeCake2/:cakeId/:additionalText/:finalPrice/:selectedOption2',
     element:<CustomizeCake2/>
 
   },
