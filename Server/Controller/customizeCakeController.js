@@ -151,7 +151,7 @@ export const placeCustomizeOrder = async (req, res) => {
         if (InsertResult.affectedRows >= 1) {
             // Insert notification into the notification table with date and time
             db.query('INSERT INTO notification (order_id, message, created_at) VALUES (?, ?, ?)', [orderId, 'New order placed', createdAt]);
-            return res.status(200).json({ message: 'Order placed successfully' });
+            return res.status(200).json({ message: 'Order placed successfully', orderId});
         } else {
             return res.status(500).json({ error: 'Failed to place order' });
         }

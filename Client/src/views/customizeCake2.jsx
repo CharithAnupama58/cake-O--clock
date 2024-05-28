@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import {  Elements } from '@stripe/react-stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import { jsPDF } from 'jspdf';  // Import jsPDF
 import arrowLeft from '../assets/images/arrowLeft.png';
 import radiobtn from '../assets/images/Group 127.png';
 import radiobtn1 from '../assets/images/Group 127 (1).png';
@@ -10,7 +11,7 @@ import radiobtn1 from '../assets/images/Group 127 (1).png';
 const stripePromise = loadStripe('pk_test_51PA220JMl6ygdWyRGPa5J7T8DstAqNdfoU9wBJQMaCZHr1UwfP8TLd6zKoQncfWBaAIVrWDudl388EJvkWuoj0Ua00pm2Lz2DH');
 
 const CustomizeCake = () => {
-    const { cakeId, additionalText,finalPrice,selectedOption2 } = useParams();
+    const { cakeId, additionalText, finalPrice, selectedOption2 } = useParams();
     const [options, setOptions] = useState([]);
     const [selectedOption, setSelectedOption] = useState('');
     const [Name, setName] = useState('');
@@ -18,10 +19,9 @@ const CustomizeCake = () => {
     const [Quantity, setQuantity] = useState('');
     const [PickupDate, setPickupDate] = useState('');
     const [branchID, setBranchID] = useState('');
+    const [orderId, setOrderId] = useState('');
     const [price, setPrice] = useState('');
     const sortedOptions = options.slice().sort((a, b) => a.branchName.localeCompare(b.branchName));
-
- 
 
     const fetchOptions = async () => {
         try {
@@ -32,7 +32,6 @@ const CustomizeCake = () => {
         }
     };
 
-    
     useEffect(() => {
         setPrice(finalPrice);
         fetchOptions();
@@ -69,38 +68,34 @@ const CustomizeCake = () => {
         try {
             const response = await axios.post('http://localhost:3001/server/customizeCake/payments', {
                 lineItems: [
-                    { price_data: { currency: 'usd', product_data: { name: 'Customized Cake' }, unit_amount: parseFloat(price)*100 }, quantity: Quantity }
+                    { price_data: { currency: 'usd', product_data: { name: 'Customized Cake' }, unit_amount: parseFloat(price) * 100 }, quantity: Quantity }
                 ]
             });
-    
+
             const { id: sessionId, url: checkoutUrl } = response.data;
             window.open(checkoutUrl, '_blank');
-    
-            // Periodically check the payment status
+
             const checkPaymentStatus = setInterval(async () => {
                 try {
                     const updatedSession = await axios.get(`http://localhost:3001/server/customizeCake/paymentStatus/${sessionId}`);
                     console.log(updatedSession);
                     if (updatedSession.data.payment_status === 'paid') {
-                        clearInterval(checkPaymentStatus); // Stop checking the payment status
-                        // Payment is successful, update UI or perform any necessary actions
+                        clearInterval(checkPaymentStatus);
                         console.log('Payment successful');
-                        // Now you can save order details to the database
                         saveOrderDetails();
                     } else if (updatedSession.data.payment_status === 'canceled') {
-                        clearInterval(checkPaymentStatus); // Stop checking the payment status
-                        // Payment is canceled, update UI or perform any necessary actions
+                        clearInterval(checkPaymentStatus);
                         console.log('Payment canceled');
                     }
                 } catch (error) {
                     console.error('Error checking payment status:', error);
                 }
-            }, 3000); // Check payment status every 3 seconds
+            }, 3000);
         } catch (error) {
             console.error('Error processing payment:', error);
         }
     };
-    
+
     const saveOrderDetails = async () => {
         try {
             const today = new Date();
@@ -117,7 +112,8 @@ const CustomizeCake = () => {
                 selectedOption2
             });
             if (response.status === 200) {
-                alert('Order placed successfully');
+                setOrderId(response.data.orderId);
+                generatePDF(); 
                 setName('');
                 setContact('');
                 setQuantity('');
@@ -130,8 +126,40 @@ const CustomizeCake = () => {
             console.error('Error saving order details:', error);
         }
     };
-    
-    
+
+    const generatePDF = () => {
+        const doc = new jsPDF();
+        
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const title = 'Order Details';
+        const titleX = (pageWidth - doc.getTextWidth(title)) / 2;
+        doc.setFontSize(20);
+        doc.text(title, titleX, 20);
+        
+        doc.setFontSize(12);
+        const leftMargin = 20;
+        let yOffset = 40;
+        const lineSpacing = 10;
+        
+        const orderDetails = [
+            `Order ID: ${orderId}`,
+            `Name: ${Name}`,
+            `Contact: ${Contact}`,
+            `Quantity: ${Quantity}`,
+            `Pickup Date: ${PickupDate}`,
+            `Cake ID: ${cakeId}`,
+            `Branch ID: ${branchID}`,
+            `Size: ${selectedOption2}`,
+            `Price: Rs. ${price}`
+        ];
+        
+        orderDetails.forEach(detail => {
+            doc.text(detail, leftMargin, yOffset);
+            yOffset += lineSpacing;
+        });
+        
+        doc.save('order_details.pdf');
+    };
 
     return (
         <div className='flex h-screen w-screen justify-between'>
@@ -182,9 +210,8 @@ const CustomizeCake = () => {
                             <div className='flex flex-row'>
                                 <input className='mt-12 w-96 h-12 ml-36 border-2 border-black rounded-xl' type='text' placeholder='Quantity' value={Quantity} onChange={handleQuantityChange} />
                             </div>
-                            
                             <div className='flex flex-col mt-6'>
-                                <button  className='mt-36 mr-60 bg-blue-500 w-36 text-white rounded'>Submit</button>
+                                <button className='mt-36 mr-60 bg-blue-500 w-36 text-white rounded'>Submit</button>
                             </div>
                         </div>
                     </form>
