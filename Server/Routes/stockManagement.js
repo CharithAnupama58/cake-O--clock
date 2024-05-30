@@ -1,5 +1,5 @@
 import express from 'express';
-import { getItemDetails,getItemIds,getItemNameDetails,saveStockDetails,getItemExpiryDates,getStockQty,releaseStock,generateNewItemId,addItem,deleteItem,getExpiredStock, deleteExpireStock } from '../Controller/stockManagementController.js';
+import { getItemDetails,getItemIds,getItemNameDetails,saveStockDetails,getItemExpiryDates,getStockQty,releaseStock,generateNewItemId,addItem,deleteItem,getExpiredStock, deleteExpireStock, getDistinctItemIds } from '../Controller/stockManagementController.js';
 
 const router = express.Router();
 
@@ -8,6 +8,9 @@ router.get('/itemDetails', async (req, res) => {
 });
 router.get('/itemIds', async (req, res) => {
     await getItemIds(req, res);
+});
+router.get('/availableitemIds', async (req, res) => {
+    await getDistinctItemIds(req, res);
 });
 
 router.get('/itemNameDetails/:selectedOption', async (req, res) => {

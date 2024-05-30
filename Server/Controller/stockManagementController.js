@@ -44,6 +44,28 @@ export const getItemIds = async (req, res) => {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+export const getDistinctItemIds = async (req, res) => {
+    try {
+        const options = await new Promise((resolve, reject) => {
+            db.query('SELECT DISTINCT i.itemName FROM Item i JOIN Stock s ON i.itemId = s.itemId', (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        if (options.length > 0) {
+            return res.status(200).json({ options });
+        } else {
+            return res.status(404).json({ error: 'No items found' });
+        }
+    } catch (error) {
+        console.log('Error fetching items:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 
 export const getItemNameDetails = async (req, res) => {
     const itemName = req.params.selectedOption;
@@ -212,10 +234,12 @@ export const getStockQty = async (req, res) => {
 };
 
 export const releaseStock = async (req, res) => {
-    const { ItemId ,selectedOption1 } = req.body;
-    let Quantity=parseInt(req.body.Quantity);
-    let releaseQuantity=parseInt(req.body.releaseQty);
-    let dbQty=Quantity-releaseQuantity;
+    const { itemId, selectedOption1 } = req.body;
+    console.log(itemId,selectedOption1)
+    let Quantity = parseInt(req.body.quantity);
+    let releaseQuantity = parseInt(req.body.releaseQty);
+    let dbQty = Quantity - releaseQuantity;
+    console.log(dbQty)
     console.log(req.body);
 
     const date = new Date(selectedOption1);
@@ -223,15 +247,30 @@ export const releaseStock = async (req, res) => {
     const month = String(date.getMonth() + 1).padStart(2, '0'); 
     const day = String(date.getDate()).padStart(2, '0'); 
     const ExpiryDate = `${year}-${month}-${day}`;
-    
 
-    if (!ItemId || !ExpiryDate) {
-        return res.status(400).json({ error: 'ItemId, Quantity, and ExpiryDate are required' });
+    if (!itemId || !ExpiryDate) {
+        return res.status(400).json({ error: 'ItemId and ExpiryDate are required' });
     }
 
     try {
+        if (dbQty === 0) {
+            const deleteResult = await new Promise((resolve, reject) => {
+                db.query('DELETE FROM Stock WHERE ItemId = ? AND ExpiryDate = ?', [itemId, ExpiryDate], (error, result) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(result);
+                });
+            });
+
+            if (deleteResult.affectedRows >= 1) {
+                return res.status(200).json({ message: 'Stock record deleted successfully' });
+            } else {
+                return res.status(500).json({ error: 'Failed to delete stock record' });
+            }
+        } else {
             const updateResult = await new Promise((resolve, reject) => {
-                db.query('UPDATE Stock SET Quantity = ? WHERE ItemId = ? AND ExpiryDate = ?', [dbQty, ItemId, ExpiryDate], (error, result) => {
+                db.query('UPDATE Stock SET Quantity = ? WHERE ItemId = ? AND ExpiryDate = ?', [dbQty, itemId, ExpiryDate], (error, result) => {
                     if (error) {
                         reject(error);
                     }
@@ -244,12 +283,13 @@ export const releaseStock = async (req, res) => {
             } else {
                 return res.status(500).json({ error: 'Failed to update stock details' });
             }
-        
+        }
     } catch (error) {
         console.log('Error saving stock details:', error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
 
 const getLatestItemId = async () => {
     try {

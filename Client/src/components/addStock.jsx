@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2'; // Make sure to install sweetalert2
 
 const AddStock = () => {
     const [options, setOptions] = useState([]);
@@ -51,15 +52,29 @@ const AddStock = () => {
 
     const validateForm = (selectedOption, Quantity, ExpiryDate) => {
         const newErrors = {};
-        const quantityPattern = /^[1-9]\d*$/;
+        const quantityPattern = /^[1-9]\d{0,3}$/; // Up to 4 digits
         const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
         if (!selectedOption) newErrors.selectedOption = true;
         if (!Quantity || !quantityPattern.test(Quantity)) newErrors.Quantity = true;
-        if (!ExpiryDate || !datePattern.test(ExpiryDate)) newErrors.ExpiryDate = true;
+        if (!ExpiryDate || !datePattern.test(ExpiryDate)) {
+            newErrors.ExpiryDate = true;
+        } else {
+            const selectedDate = new Date(ExpiryDate);
+            const currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0); // Compare only the date part
+            if (selectedDate < currentDate) {
+                newErrors.ExpiryDate = true;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Date',
+                    text: 'Expiry date cannot be in the past.',
+                });
+            }
+        }
 
         setErrors(newErrors);
-        setIsFormValid(Object.keys(newErrors).length === 0);
+        setIsFormValid(Object.keys(newErrors).length === 0 && selectedOption && Quantity && ExpiryDate);
     };
 
     const handleAddStockSubmit = async (e) => {
@@ -74,12 +89,17 @@ const AddStock = () => {
             });
 
             if (response.status === 200) {
-                alert('Stock added successfully');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Stock added successfully',
+                });
                 setItemId('');
                 setStockQty('');
                 setExpDate('');
                 setSelectedOption('');
                 setItemNameDetails(null);
+                setIsFormValid(false);
             } else {
                 console.error('Failed to add stock:', response.data.message);
             }
@@ -149,6 +169,7 @@ const AddStock = () => {
                         <input
                             type="number"
                             id="input4"
+                            maxLength="4"
                             className={`w-full h-10 px-3 rounded border ${errors.Quantity ? 'border-red-500' : Quantity ? 'border-green-500' : 'border-gray-500'}`}
                             placeholder="Stock Quantity"
                             value={Quantity}
