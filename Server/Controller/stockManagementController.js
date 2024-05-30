@@ -366,16 +366,16 @@ export const addItem = async (req, res) => {
 };
 
 export const deleteItem = async (req, res) => {
-    const { ItemId } = req.body;
+    const { itemId } = req.body;
     console.log(req.body);
 
-    if (!ItemId) {
+    if (!itemId) {
         return res.status(400).json({ error: 'ItemId is required' });
     }
 
     try {
         const stockRecords = await new Promise((resolve, reject) => {
-            db.query('SELECT * FROM Stock WHERE ItemId = ?', [ItemId], (error, results) => {
+            db.query('SELECT * FROM Stock WHERE ItemId = ?', [itemId], (error, results) => {
                 if (error) {
                     reject(error);
                 } else {
@@ -386,7 +386,7 @@ export const deleteItem = async (req, res) => {
 
         if (stockRecords.length > 0) {
             await new Promise((resolve, reject) => {
-                db.query('DELETE FROM Stock WHERE ItemId = ?', [ItemId], (error, result) => {
+                db.query('DELETE FROM Stock WHERE ItemId = ?', [itemId], (error, result) => {
                     if (error) {
                         reject(error);
                     }
@@ -397,7 +397,7 @@ export const deleteItem = async (req, res) => {
 
 
         const deleteResult = await new Promise((resolve, reject) => {
-            db.query('DELETE FROM item WHERE itemId = ?', [ItemId], (error, result) => {
+            db.query('DELETE FROM item WHERE itemId = ?', [itemId], (error, result) => {
                 if (error) {
                     reject(error);
                 } else {
