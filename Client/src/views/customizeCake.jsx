@@ -16,6 +16,7 @@ export const CustomizeCake = () => {
     const [cakeId, setCakeId] = useState('');
     const [basePrice, setBasePrice] = useState(0);
     const [finalPrice, setFinalPrice] = useState(0);
+    const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(true);
     const navigate = useNavigate();
 
     const fetchOptions = async () => {
@@ -42,6 +43,10 @@ export const CustomizeCake = () => {
             fetchCakeDetails();
         }
     }, [selectedOption, selectedOption1]);
+
+    useEffect(() => {
+        validateForm();
+    }, [selectedOption, selectedOption1, selectedOption2, additionalText]);
 
     const handleSelectChange = (event) => {
         setSelectedOption(event.target.value);
@@ -96,6 +101,14 @@ export const CustomizeCake = () => {
         navigate(`/CustomizeCake2/${cakeId}/${additionalText}/${finalPrice}/${selectedOption2}`);
     };
 
+    const validateForm = () => {
+        if (selectedOption && selectedOption1 && selectedOption2 && additionalText && additionalText.length <= 50) {
+            setIsNextButtonDisabled(false);
+        } else {
+            setIsNextButtonDisabled(true);
+        }
+    };
+
     return (
         <div className='flex h-screen w-screen justify-between'>
             <Link to='/'><img src={arrowLeft} className='w-8 h-8 ml-8 mt-10' alt='Icon' /></Link>
@@ -120,7 +133,7 @@ export const CustomizeCake = () => {
                             <select id="combo-box" className="w-72 mt-14 ml-36 h-10 px-3 rounded border-2 border-black" value={selectedOption} onChange={handleSelectChange}>
                                 <option value="">Select a Cake Type</option>
                                 {options.map((option, index) => (
-                                    <option key={index}>{option.cakeType}</option>
+                                    <option key={index} value={option.cakeType}>{option.cakeType}</option>
                                 ))}
                             </select>
                         </div>
@@ -128,16 +141,16 @@ export const CustomizeCake = () => {
                             <select id="combo-box" className="w-72 mt-14 ml-40 mr-36 h-10 px-3 rounded border-2 border-black" value={selectedOption1} onChange={handleSelectChange1}>
                                 <option value="">Select a Flavour of the Icing</option>
                                 {options1.map((option1, index) => (
-                                    <option key={index}>{option1.icingType}</option>
+                                    <option key={index} value={option1.icingType}>{option1.icingType}</option>
                                 ))}
                             </select>
                         </div>
                         <div className='flex flex-row'>
                             <select id="combo-box" className="w-72 mt-14 ml-12 mr-36 h-10 px-3 rounded border-2 border-black" value={selectedOption2} onChange={handleSelectChange2}>
                                 <option value="">Select a Size For Cake</option>
-                                <option>Small(1 Kilo)</option>
-                                <option>Medium(2.5 Kilo)</option>
-                                <option>Large(4 Kilo)</option>
+                                <option value="Small(1 Kilo)">Small(1 Kilo)</option>
+                                <option value="Medium(2.5 Kilo)">Medium(2.5 Kilo)</option>
+                                <option value="Large(4 Kilo)">Large(4 Kilo)</option>
                             </select>
                         </div>
                     </div>
@@ -147,7 +160,7 @@ export const CustomizeCake = () => {
                                 <input id='txtPrice' className='mt-12 w-72 h-12 ml-36 border-2 border-black rounded-xl' type='text' placeholder='Price' value={`${finalPrice}`} readOnly />
                             </div>
                             <div className='flex flex-row'>
-                                <input className='mt-12 h-12 w-72 ml-24 mr-36 border-2 border-black rounded-xl' type='text' placeholder='Add A text to add on the Cake' value={additionalText} onChange={handleAdditionalTextChange} />
+                                <input className='mt-12 h-12 w-72 ml-24 mr-36 border-2 border-black rounded-xl' type='text' placeholder='Add A text to add on the Cake' maxLength={50} value={additionalText} onChange={handleAdditionalTextChange} />
                             </div>
                             <div className='flex flex-row'>
                                 <img id='cakeImg' src={cakeDetails[0]?.imgLink} className='w-44 h-44 mr-60 mt-12' alt='Cake' />
@@ -157,7 +170,7 @@ export const CustomizeCake = () => {
                     {cakeDetails.length > 0 && (
                         <div className='flex flex-row justify-center'>
                             <div className='flex flex-col mt-6 ml-52'>
-                                <button className='mt-12 ml-4 mr-60 w-36 bg-blue-500 text-white rounded' onClick={handleNextClick}>Next</button>
+                                <button className={`mt-12 ml-4 mr-60 w-36 bg-blue-500 text-white rounded ${isNextButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`} onClick={handleNextClick} disabled={isNextButtonDisabled}>Next</button>
                             </div>
                         </div>
                     )}
