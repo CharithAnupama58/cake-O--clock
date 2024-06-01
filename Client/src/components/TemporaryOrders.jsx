@@ -10,7 +10,6 @@ const TemporaryOrders = () => {
     useEffect(() => {          
         handleAllTempOrders();
         
-        // setInterval(handleAllTempOrders, 5000);
     }, []);
 
     const handleAllTempOrders = async () => {
@@ -62,6 +61,11 @@ const TemporaryOrders = () => {
         });
 
         if (response.status === 200) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Picture Order Placed successfully',
+            });
             
             handleAllTempOrders();
             renderTable();

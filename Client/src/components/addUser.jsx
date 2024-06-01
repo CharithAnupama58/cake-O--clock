@@ -1,6 +1,8 @@
 
 import  { useState, useEffect } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+
 
 
 const AddUser = () => {
@@ -97,7 +99,11 @@ const AddUser = () => {
             });
 
             if (response.status === 200) {
-                alert('Feedback submitted successfully');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'User added Successfully',
+                });
                 setFirtName('');
                 setLastName('');
                 setSelectedOption1('');

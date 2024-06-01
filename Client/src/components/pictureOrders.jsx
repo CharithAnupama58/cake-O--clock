@@ -59,7 +59,11 @@ const PictureOrder = () => {
                 });
     
                 if (response.status === 200) {
-                    alert('Feedback submitted successfully');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Order status updated successfully',
+                    });
                     handleOrdersToPrepare();
                 } else {
                     console.error('Invalid username or password');
