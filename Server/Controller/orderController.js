@@ -41,7 +41,7 @@ export const getAllOrderDetails = async (req, res) => {
             return res.status(200).json({ items });
             
         } else {
-            return res.status(404).json({ error: 'No items found' });
+            return res.status(404).json({items});
         }
     } catch (error) {
         console.log('Error fetching items:', error);
@@ -195,7 +195,7 @@ export const getAllPictureOrderDetails = async (req, res) => {
             return res.status(200).json({ items });
             
         } else {
-            return res.status(404).json({ error: 'No items found' });
+            return res.status(404).json({ items: [] });
         }
     } catch (error) {
         console.log('Error fetching items:', error);

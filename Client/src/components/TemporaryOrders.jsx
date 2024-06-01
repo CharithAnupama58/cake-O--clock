@@ -44,6 +44,7 @@ const TemporaryOrders = () => {
 
             if (response.status === 200) {
                 alert('Feedback submitted successfully');
+                handleAllTempOrders();
                 // navigate(`/CustomizeCake2/${cakeId}/${additionalText}`);
             } else {
                 console.error('Invalid username or password');
@@ -63,6 +64,7 @@ const TemporaryOrders = () => {
         if (response.status === 200) {
             
             handleAllTempOrders();
+            renderTable();
             // navigate(`/CustomizeCake2/${cakeId}/${additionalText}`);
         } else {
             console.error('Invalid username or password');

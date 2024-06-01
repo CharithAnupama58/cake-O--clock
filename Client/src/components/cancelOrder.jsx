@@ -25,20 +25,46 @@ const CancelOrders = () => {
             setItems(response.data.items);
             setShowAllOrders(true);
             setShowOrdersToPrepare(false);
+            if (response.data.items.length === 0) {
+                Swal.fire({
+                    title: 'No Orders',
+                    text: 'There are no customize orders available.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
           } catch (error) {
             console.error('Error fetching items:', error);
           }
         };
         const handleOrdersToPrepare = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/server/order/AllPictureorderDetails'); 
-                setOrders(response.data.items);
+                const response = await axios.get('http://localhost:3001/server/order/AllPictureorderDetails');
+                
+                if (response.status === 200 && response.data.items.length > 0) {
+                    setOrders(response.data.items);
+                } else {
+                    setOrders([]);
+                    Swal.fire({
+                        title: 'No Orders',
+                        text: 'There are no picture orders available.',
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    });
+                }
                 setShowOrdersToPrepare(true);
                 setShowAllOrders(false);
-              } catch (error) {
+            } catch (error) {
                 console.error('Error fetching items:', error);
-              }
+                Swal.fire({
+                    title: 'No Orders',
+                    text: 'There are no picture orders available.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
         };
+        
         const handleCustomizeDelete = async (orderId) => {
             console.log(orderId);
             try {
@@ -293,7 +319,7 @@ const CancelOrders = () => {
     return (
         <div className='flex flex-row w-full justify-center'>
             <div className='flex flex-col items-center'>
-                        <h1 className='mt-10 font-bold text-4xl'>Today's Cake Orders</h1>
+                        <h1 className='mt-10 font-bold text-4xl'>Cancel Cake Orders</h1>
                         <div>
                             <label className="font-semibold text-xl">Filter Items:</label>
                             <select id="combo-box" className="mt-12 h-10 px-3 rounded border border-black" value={selectedOption} onChange={handleSelectChange}  >

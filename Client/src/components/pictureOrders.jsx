@@ -11,6 +11,8 @@ const PictureOrder = () => {
     const [showOrdersToPrepare, setShowOrdersToPrepare] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [modalImage, setModalImage] = useState('');
 
     useEffect(() => {   
         setSelectedOption('All Orders');       
@@ -129,6 +131,15 @@ const PictureOrder = () => {
                 break;
             }
     }
+    const openModal = (imageLink) => {
+        setModalImage(imageLink);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setModalImage('');
+    };
     const renderTable = () => {
         if (showAllOrders) {
             return (
@@ -165,7 +176,13 @@ const PictureOrder = () => {
                                                 })()}
                                             </td>
                                             <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            <span className='text-blue-700' style={{textDecoration: 'underline', cursor: 'pointer'}} onClick={() => window.open(item.imgLink, "_blank")}>Link</span>
+                                                <span
+                                                    className='text-blue-700'
+                                                    style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                                                    onClick={() => openModal(item.imgLink)}
+                                                >
+                                                    Link
+                                                </span>
                                             </td>
                                             <td className="px-4 text-center border-r border-gray-400 py-3">{item.cakeText}</td>
                                             <td className="px-4 text-center border-r border-gray-400 py-3">{item.status}</td>
@@ -207,7 +224,13 @@ const PictureOrder = () => {
                                         </td>
 
                                         <td className="px-4 text-center border-r border-gray-400 py-3">
-                                            <span className='text-blue-700' style={{textDecoration: 'underline', cursor: 'pointer'}} onClick={() => window.open(item.imgLink, "_blank")}>Link</span>
+                                            <span
+                                                className='text-blue-700'
+                                                style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                                                onClick={() => openModal(item.imgLink)}
+                                                >
+                                                Link
+                                             </span>
                                         </td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.cakeText}</td>
                                         <td className="px-4 text-center border-r border-gray-400 py-3">{item.status}</td>
@@ -241,6 +264,15 @@ const PictureOrder = () => {
                         </div>
                         <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6' onClick={handleDownload}>Download Report</button>
                 </div>
+                {showModal && (
+                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
+                        <div className='bg-white p-4 rounded-lg'>
+                            <h2 className='text-2xl font-bold mb-4'>Uploaded Image</h2>
+                            <img src={modalImage} alt='Uploaded' className='max-w-full max-h-96' />
+                            <button className='mt-4 bg-blue-500 text-white px-4 py-2 rounded' onClick={closeModal}>Close</button>
+                        </div>
+                    </div>
+        )}
         </div>
     );
 };

@@ -40,7 +40,7 @@ export const  placePictureUploadingOrder = async (req, res) => {
             });
 
             if (InsertResult.affectedRows >= 1) {
-                return res.status(200).json({ message: 'Stock details updated successfully' });
+                return res.status(200).json({ message: 'Stock details updated successfully' ,orderId});
             } else {
                 return res.status(500).json({ error: 'Failed to update stock details' });
             }

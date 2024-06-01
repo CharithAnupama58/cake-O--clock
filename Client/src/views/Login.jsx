@@ -1,8 +1,9 @@
-import  { useState } from 'react';
-import image7 from '../assets/images/image 7.png'
-import image8 from '../assets/images/_ (1).png'
-import { Link,useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import image7 from '../assets/images/image 7.png';
+import image8 from '../assets/images/_ (1).png';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -18,30 +19,33 @@ const Login = () => {
                 username,
                 password
             });
-            const data=response.data;
+            const data = response.data;
             console.log(data);
 
             if (response.status === 200) {
-                alert('Login successful');
-                
-                const { jobRole,branchId } = data; 
+                Swal.fire({
+                    title: 'Login Successful',
+                    text: 'Welcome back!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+
+                const { jobRole, branchId } = data;
                 if (jobRole === 'Stock Keeper') {
                     navigate('/StockManagement');
                 } else if (jobRole === 'Factory Employee') {
                     navigate('/FactoryEmployee');
                 } else if (jobRole === 'Branch Employee') {
                     navigate(`/BranchEmployee/${branchId}`);
-                }else if (jobRole === 'Admin') {
+                } else if (jobRole === 'Admin') {
                     navigate('/AdminDashBoard');
                 }
             } else {
-                // If login fails, display error message
                 alert('Login failed');
                 setError('Invalid username or password');
             }
         } catch (error) {
             console.error('Login failed:', error);
-            // If login fails due to network error or server down, display generic error message
             setError('Failed to login. Please try again later.');
         }
     };
@@ -49,7 +53,7 @@ const Login = () => {
     return (
         <section className='flex bg-black items-center'>
             <div className='h-full w-1/2'>
-                <img src={image7} className='object-cover'></img>
+                <img src={image7} className='object-cover' alt='Background' />
 
                 <div className="absolute top-36 left-1/4 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
                     <h1 className="text-5xl font-bold">"Indulge in the</h1>
@@ -69,7 +73,7 @@ const Login = () => {
             <div className='h-96 w-1/4 flex ml-52 justify-center bg-white rounded-xl border border-gray-300'>
                 <div>
                     <Link to='/'><a href='/home'>
-                        <img src={image8} alt='Icon'></img>
+                        <img src={image8} alt='Icon' />
                     </a></Link>
                     <h2 className="text-4xl font-bold mt-7 ml-36">Login</h2>
                     <form onSubmit={handleLogin}>

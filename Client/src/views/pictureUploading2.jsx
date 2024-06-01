@@ -153,7 +153,7 @@ export const PictureUploading2 = () => {
         }
     };
 
-    const generatePDF = (orderId) => {
+    const generatePDF = (orderID) => {
         const doc = new jsPDF();
         
         const pageWidth = doc.internal.pageSize.getWidth();
@@ -168,7 +168,7 @@ export const PictureUploading2 = () => {
         const lineSpacing = 10;
         
         const orderDetails = [
-            `Order ID: ${orderId}`,
+            `Order ID: ${orderID}`,
             `Name: ${Name}`,
             `Contact: ${Contact}`,
             `Quantity: ${Quantity}`,
@@ -222,7 +222,7 @@ export const PictureUploading2 = () => {
                     <form onSubmit={handleSubmit}>
                         <div className='flex flex-row justify-between'>
                             <div className='flex flex-row'>
-                                <input className='mt-12 w-96 mr-36 h-12 ml-36 border-2 border-black rounded-xl' type='text' placeholder='Add A text to add on the Cake' value={additionalText} onChange={handleAdditionalTextChange} maxLength="100" />
+                                <input className='mt-12 w-96 mr-36 h-12 ml-36 border-2 border-black rounded-xl' type='text' placeholder='Add A text to add on the Cake' value={additionalText} onChange={handleAdditionalTextChange} maxLength="30" />
                             </div>
                             <div className='flex flex-row'>
                                 <input className='mt-12 w-96 ml-8 mr-36 border-2 border-black rounded-xl' type='text' placeholder='Contact' value={Contact} onChange={handleContactChange} maxLength="15" />
@@ -234,7 +234,7 @@ export const PictureUploading2 = () => {
                             </div>
                             <div className='flex flex-col mt-6'>
                                 <input className='mt-6 w-96 mr-36 h-12 ml-36 border-2 border-black rounded-xl' type='text' placeholder='Quantity' value={Quantity} onChange={handleQuantityChange} maxLength="4" />
-                                <button type='submit' className='mt-16 ml-36 w-36 bg-blue-500 text-white rounded-xl' disabled={!isFormValid}>Submit</button>
+                                <button type='submit' className={`mt-16 ml-36 w-36 bg-blue-500 text-white rounded-xl ${isFormValid ? '' : 'opacity-50 cursor-not-allowed'}`}  disabled={!isFormValid}>Submit</button>
                             </div>
                         </div>
                     </form>
