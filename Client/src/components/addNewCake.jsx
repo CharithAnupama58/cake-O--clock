@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const AddCake = () => {
     const [cakeId, setCakeId] = useState('');
@@ -7,10 +8,15 @@ const AddCake = () => {
     const [icingType, setIcingType] = useState('');
     const [price, setPrice] = useState('');
     const [imgUrl, setImgUrl] = useState(null);
+    const [isFormValid, setIsFormValid] = useState(false);
 
     useEffect(() => {
         generateNewItemIdFromBackend();
     }, []);
+
+    useEffect(() => {
+        validateForm();
+    }, [cakeType, icingType, price, imgUrl]);
 
     const generateNewItemIdFromBackend = async () => {
         try {
@@ -23,7 +29,6 @@ const AddCake = () => {
 
     const handleAddStockSubmit = async (e) => {
         e.preventDefault();
-        console.log(cakeId, cakeType, icingType, price, imgUrl);
         try {
             const response = await axios.post('http://localhost:3001/server/admin/addCake', {
                 cakeId,
@@ -34,15 +39,17 @@ const AddCake = () => {
             });
 
             if (response.status === 200) {
-                alert('Cake added successfully');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Cake added successfully',
+                });
                 setCakeId('');
                 setCakeType('');
                 setIcingType('');
                 setPrice('');
                 setImgUrl(null);
                 generateNewItemIdFromBackend();
-            } else {
-                console.error('Failed to add cake');
             }
         } catch (error) {
             console.error('Failed to add cake:', error);
@@ -63,11 +70,21 @@ const AddCake = () => {
 
             const url = response.data.imageUrl;
             setImgUrl(url);
-            console.log(url);
         } catch (error) {
             console.error('Error uploading image:', error);
             alert('Error uploading image. Please try again.');
         }
+    };
+
+    const validateForm = () => {
+        const textRegex = /^[A-Za-z\s]{1,20}$/; // Allows letters and spaces, max length 20
+        const priceRegex = /^\d+(\.\d{1,2})?$/; // Allows numbers with up to two decimal places
+        const isCakeTypeValid = textRegex.test(cakeType);
+        const isIcingTypeValid = textRegex.test(icingType);
+        const isPriceValid = priceRegex.test(price) && price > 0;
+        const isImageValid = imgUrl !== null;
+
+        setIsFormValid(isCakeTypeValid && isIcingTypeValid && isPriceValid && isImageValid);
     };
 
     return (
@@ -81,11 +98,11 @@ const AddCake = () => {
                     </div>
                     <div className="mb-8 flex items-center">
                         <label htmlFor="input2" className="block text-xl w-60 mr-4">Cake Type:</label>
-                        <input type="text" id="input2" className="w-full h-10 px-3 rounded border border-black" placeholder="Cake Type" value={cakeType} onChange={(e) => setCakeType(e.target.value)} />
+                        <input type="text" id="input2" className="w-full h-10 px-3 rounded border border-black" placeholder="Cake Type" value={cakeType} onChange={(e) => setCakeType(e.target.value)} maxLength={20} />
                     </div>
                     <div className="mb-8 flex items-center">
                         <label htmlFor="input2" className="block text-xl w-60 mr-4">Icing Type:</label>
-                        <input type="text" id="input2" className="w-full h-10 px-3 rounded border border-black" placeholder="Icing Type" value={icingType} onChange={(e) => setIcingType(e.target.value)} />
+                        <input type="text" id="input2" className="w-full h-10 px-3 rounded border border-black" placeholder="Icing Type" value={icingType} onChange={(e) => setIcingType(e.target.value)} maxLength={20} />
                     </div>
                     <div className="mb-8 flex items-center">
                         <label htmlFor="input2" className="block text-xl w-60 mr-4">Price:</label>
@@ -100,7 +117,7 @@ const AddCake = () => {
                             <img src={imgUrl} alt="Cake" className="w-24 h-24 object-cover rounded-lg" />
                         </div>
                     )}
-                    <button className='bg-custom-blue text-white font-bold rounded-xl mt-2 ml-20  px-6'>Add Cake</button>
+                    <button className={`bg-custom-blue text-white font-bold rounded-xl mt-2 ml-20 px-6 ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={!isFormValid}>Add Cake</button>
                 </form>
             </div>
         </div>
