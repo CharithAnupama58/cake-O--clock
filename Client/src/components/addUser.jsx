@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import emailjs from 'emailjs-com';
 
 const AddUser = () => {
     const [userId, setUserId] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
     const [selectedOption, setSelectedOption] = useState('');
     const [selectedOption1, setSelectedOption1] = useState('');
     const [options, setOptions] = useState([]);
@@ -22,7 +24,7 @@ const AddUser = () => {
 
     useEffect(() => {
         validateForm();
-    }, [userId, firstName, lastName, selectedOption, selectedOption1]);
+    }, [userId, firstName, lastName, email, selectedOption, selectedOption1]);
 
     const fetchOptions = async () => {
         try {
@@ -77,12 +79,14 @@ const AddUser = () => {
 
     const validateForm = () => {
         const nameRegex = /^[A-Za-z]{1,20}$/; // Allows only letters, max length 20
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email validation regex
         const isFirstNameValid = nameRegex.test(firstName);
         const isLastNameValid = nameRegex.test(lastName);
+        const isEmailValid = emailRegex.test(email);
         const isJobRoleSelected = selectedOption1 !== '';
         const isBranchSelected = selectedOption !== '';
 
-        setIsFormValid(isFirstNameValid && isLastNameValid && isJobRoleSelected && isBranchSelected);
+        setIsFormValid(isFirstNameValid && isLastNameValid && isEmailValid && isJobRoleSelected && isBranchSelected);
     };
 
     const handleAddUserSubmit = async (e) => {
@@ -108,13 +112,32 @@ const AddUser = () => {
             });
 
             if (response.status === 200) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'User added successfully',
-                });
+                const templateParams = {
+                    email: email,
+                    userName: userName,
+                    password: password,
+                    firstName: firstName
+                };
+
+                emailjs.send('service_769tgla', 'template_rjbvmfq', templateParams, '5scjLq4jifWZGLOtT')
+                    .then(() => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'User added successfully and email sent',
+                        });
+                    }, (error) => {
+                        console.error('Failed to send email:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'User added but failed to send email.',
+                        });
+                    });
+
                 setFirstName('');
                 setLastName('');
+                setEmail('');
                 setSelectedOption1('');
                 setUserName('');
                 setPassword('');
@@ -148,20 +171,16 @@ const AddUser = () => {
                         <input type="text" id="input2" className="w-full h-10 px-3 rounded border border-black" placeholder="First Name" value={firstName} onChange={handleFirstNameChange} />
                     </div>
                     <div className="mb-4 flex items-center">
-                        <label htmlFor="input2" className="block text-xl w-60 mr-4">Last Name:</label>
-                        <input type="text" id="input2" className="w-full h-10 px-3 rounded border border-black" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                        <label htmlFor="input3" className="block text-xl w-60 mr-4">Last Name:</label>
+                        <input type="text" id="input3" className="w-full h-10 px-3 rounded border border-black" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                     </div>
                     <div className="mb-4 flex items-center">
-                        <label htmlFor="input2" className="block text-xl w-60 mr-4">User Name:</label>
-                        <input type="text" id="input2" className="w-full h-10 px-3 rounded border border-black" placeholder="User Name" value={userName} disabled />
+                        <label htmlFor="input4" className="block text-xl w-60 mr-4">Email:</label>
+                        <input type="email" id="input4" className="w-full h-10 px-3 rounded border border-black" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <div className="mb-4 flex items-center">
-                        <label htmlFor="input2" className="block text-xl w-60 mr-4">Password:</label>
-                        <input type="text" id="input2" className="w-full h-10 px-3 rounded border border-black" placeholder="Password" value={password} disabled />
-                    </div>
-                    <div className="mb-4 flex items-center">
-                        <label htmlFor="combo-box" className="block text-xl w-60 mr-4">Job Role:</label>
-                        <select id="combo-box" className="w-full h-10 px-3 rounded border border-black" value={selectedOption1} onChange={handleSelectChange1}>
+                        <label htmlFor="combo-box1" className="block text-xl w-60 mr-4">Job Role:</label>
+                        <select id="combo-box1" className="w-full h-10 px-3 rounded border border-black" value={selectedOption1} onChange={handleSelectChange1}>
                             <option value="">Select an option...</option>
                             <option>Admin</option>
                             <option>Stock Keeper</option>
@@ -170,8 +189,8 @@ const AddUser = () => {
                         </select>
                     </div>
                     <div className="mb-4 flex items-center">
-                        <label htmlFor="combo-box" className="block text-xl w-60 mr-4">Branch:</label>
-                        <select id="combo-box" className="w-full h-10 px-3 rounded border border-black" value={selectedOption} onChange={handleSelectChange}>
+                        <label htmlFor="combo-box2" className="block text-xl w-60 mr-4">Branch:</label>
+                        <select id="combo-box2" className="w-full h-10 px-3 rounded border border-black" value={selectedOption} onChange={handleSelectChange}>
                             <option value="">Select an option...</option>
                             {options.map((option, index) => (
                                 <option key={index}>{option.branchName}</option>
