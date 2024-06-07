@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import  { useState, useEffect, useContext} from 'react';
 import image9 from '../assets/images/Vector (3).png';
 import image4 from '../assets/images/image_4-removebg-preview 1.png';
 import image8 from '../assets/images/image 8.png';
@@ -10,9 +10,12 @@ import AllUsers from '../components/All Users';
 import AddBranch from '../components/addBranch';
 import AddCake from '../components/addNewCake';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../Context/AuthProvider';
 
 
 const AdminDashBoard = () => {
+    const { authState } = useContext(AuthContext);
+    const { jobRole,firstName } = authState;
     const [dateTime, setDateTime] = useState(new Date());
     const [showLogoutPopup, setShowLogoutPopup] = useState(false);
     const navigate = useNavigate();
@@ -59,8 +62,8 @@ const AdminDashBoard = () => {
                 <div className='mr-10 flex items-center'>
                     <img src={image9} alt='Icon' className='mr-2 w-10 h-10' /> 
                     <div className='flex flex-col'> 
-                        <h1 className='font-bold text-1xl'>Mr.Pramuddhika</h1> 
-                        <h1 className='font-bold text-1xl'>Stock Keeper</h1> 
+                        <h1 className='font-bold text-1xl'>Mr.{firstName}</h1> 
+                        <h1 className='font-bold text-1xl'>{jobRole}</h1> 
                     </div>
                 </div>
             </div>

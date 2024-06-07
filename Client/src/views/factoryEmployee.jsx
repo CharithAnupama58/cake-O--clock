@@ -15,9 +15,13 @@ import TodayOrders from '../components/TodayOrders';
 import CancelOrder from '../components/cancelOrder';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { AuthContext } from '../Context/AuthProvider';
+import { useContext } from 'react';
 
 
 const FactoryEmployee = () => {
+    const { authState } = useContext(AuthContext);
+    const { jobRole,firstName } = authState;
     const [dateTime, setDateTime] = useState(new Date());
     const [showLogoutPopup, setShowLogoutPopup] = useState(false);
     const navigate = useNavigate();
@@ -93,8 +97,8 @@ const FactoryEmployee = () => {
                     <IoNotificationsOutline className="mr-2 w-8 h-8 cursor-pointer" onClick={handleNewNotification} /> 
                     <img src={image9} alt='Icon' className='mr-2 w-10 h-10' /> 
                     <div className='flex flex-col'> 
-                        <h1 className='font-bold text-1xl'>Mr.Pramuddhika</h1> 
-                        <h1 className='font-bold text-1xl'>Stock Keeper</h1> 
+                        <h1 className='font-bold text-1xl'>Mr.{firstName}</h1> 
+                        <h1 className='font-bold text-1xl'>{jobRole}</h1> 
                     </div>
                     {newNotifications > 0 && <div className="ml-2 bg-red-500 text-white px-2 py-1 rounded-full">{newNotifications}</div>}
                 </div>

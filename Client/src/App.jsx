@@ -1,86 +1,96 @@
-// eslint-disable-next-line no-unused-vars
 import { useState } from 'react'
 import './App.css'
 import Header from './components/Header'
 import Home from './views/Home'
-// Removed unused import statement
 import Login from './views/Login'
 import StockManagement from './views/stockManagementComponenet'
 import FactoryEmployee from './views/factoryEmployee'
-import CustomizeCake  from './views/customizeCake'
-import CustomizeCake2  from './views/customizeCake2'
-import PictureUploading  from './views/pictureUploading'
-import PictureUploading2  from './views/pictureUploading2'
+import CustomizeCake from './views/customizeCake'
+import CustomizeCake2 from './views/customizeCake2'
+import PictureUploading from './views/pictureUploading'
+import PictureUploading2 from './views/pictureUploading2'
 import BranchEmployee from './views/BranchEmployee'
 import AdminBoard from './views/AdminDashBoard'
 import SuccessPage from './views/SuccessUrl'
 import CancelPage from './views/CancelUrl'
-import { createBrowserRouter,RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { AuthProvider } from '../src/Context/AuthProvider'
+import PrivateRoute from './PrivateRoute'
 
-const router=createBrowserRouter([
+const router = createBrowserRouter([
   {
-    path:'/',
-    element:<Home/>
-  },
-
-  {
-    path:'/Login',
-    element:<Login/>
-
-  },
-
-  {
-    path:'/StockManagement',
-    element:<StockManagement/>
-
+    path: '/',
+    element: <Home />
   },
   {
-    path:'/CustomizeCake',
-    element:<CustomizeCake/>
-
+    path: '/Login',
+    element: <Login />
   },
   {
-    path:'/CustomizeCake2/:cakeId/:additionalText/:finalPrice/:selectedOption2',
-    element:<CustomizeCake2/>
-
+    path: '/StockManagement',
+    element: (
+      <PrivateRoute allowedRoles={['Stock Keeper']}>
+        <StockManagement />
+      </PrivateRoute>
+    )
   },
   {
-    path:'/PictureUploading',
-    element:<PictureUploading/>
-
+    path: '/CustomizeCake',
+    element: <CustomizeCake />
   },
   {
-    path:'/PictureUploading2/:imageUrl',
-    element:<PictureUploading2/>
-
+    path: '/CustomizeCake2/:cakeId/:additionalText/:finalPrice/:selectedOption2',
+    element: <CustomizeCake2 />
   },
   {
-    path:'/FactoryEmployee',
-    element:<FactoryEmployee/>
+    path: '/PictureUploading',
+    element: <PictureUploading />
   },
   {
-    path:'/BranchEmployee/:branchId',
-    element:<BranchEmployee/>
+    path: '/PictureUploading2/:imageUrl',
+    element: <PictureUploading2 />
   },
   {
-    path:'/AdminDashBoard',
-    element:<AdminBoard/>
+    path: '/FactoryEmployee',
+    element: (
+      <PrivateRoute allowedRoles={['Factory Employee']}>
+        <FactoryEmployee />
+      </PrivateRoute>
+    )
   },
   {
-    path:'/SuccessPage',
-    element:<SuccessPage/>
+    path: '/BranchEmployee/:branchId',
+    element: (
+      <PrivateRoute allowedRoles={['Branch Employee']}>
+        <BranchEmployee />
+      </PrivateRoute>
+    )
   },
   {
-    path:'/CancelPage',
-    element:<CancelPage/>
+    path: '/AdminDashBoard',
+    element: (
+      <PrivateRoute allowedRoles={['Admin']}>
+        <AdminBoard />
+      </PrivateRoute>
+    )
+  },
+  {
+    path: '/SuccessPage',
+    element: <SuccessPage />
+  },
+  {
+    path: '/CancelPage',
+    element: <CancelPage />
   },
 ])
 
 function App() {
   return (
-    <div className='App'>
-      <RouterProvider router={router}/>
-    </div>   
+    <AuthProvider>
+      <div className='App'>
+        <RouterProvider router={router} />
+      </div>
+    </AuthProvider>
   )
 }
 

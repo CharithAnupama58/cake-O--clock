@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import image7 from '../assets/images/image 7.png';
 import image8 from '../assets/images/_ (1).png';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { AuthContext } from '../Context/AuthProvider';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { setAuthState } = useContext(AuthContext);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -30,7 +32,16 @@ const Login = () => {
                     confirmButtonText: 'OK'
                 });
 
-                const { jobRole, branchId } = data;
+                const { jobRole, branchId, firstName } = data;
+
+                setAuthState({
+                    isAuthenticated: true,
+                    jobRole,
+                    branchId,
+                    firstName,
+                });
+
+                // Redirect based on job role
                 if (jobRole === 'Stock Keeper') {
                     navigate('/StockManagement');
                 } else if (jobRole === 'Factory Employee') {

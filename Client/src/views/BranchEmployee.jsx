@@ -5,12 +5,16 @@ import image8 from '../assets/images/image 8.png';
 import image11 from '../assets/images/image 11.png';
 import BranchTodayOrders from '../components/BranchTodayOrders';
 import ReleaseOrders from '../components/ReleaseOrders';
+import { AuthContext } from '../Context/AuthProvider';
+import { useContext } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
 
 
 const BranchEmployee = () => {
+    const { authState } = useContext(AuthContext);
+    const { jobRole,firstName } = authState;
     const [dateTime, setDateTime] = useState(new Date());
     const [showLogoutPopup, setShowLogoutPopup] = useState(false);
     const navigate = useNavigate();
@@ -53,8 +57,8 @@ const BranchEmployee = () => {
                 <div className='mr-10 flex items-center'>
                     <img src={image9} alt='Icon' className='mr-2 w-10 h-10' /> 
                     <div className='flex flex-col'> 
-                        <h1 className='font-bold text-1xl'>Mr.Pramuddhika</h1> 
-                        <h1 className='font-bold text-1xl'>Stock Keeper</h1> 
+                        <h1 className='font-bold text-1xl'>Mr.{firstName}</h1> 
+                        <h1 className='font-bold text-1xl'>{jobRole}</h1> 
                     </div>
                 </div>
             </div>

@@ -75,8 +75,8 @@ export const login = (req, res) => {
 
             // Login successful
             console.log(user.jobRole);
-            const { jobRole, branchId } = user;
-            res.status(200).json({ message: 'Login successful', jobRole, branchId });
+            const { jobRole, branchId,firstName } = user;
+            res.status(200).json({ message: 'Login successful', jobRole, branchId, firstName });
         });
     } catch (error) {
         console.error('Error during login:', error);
