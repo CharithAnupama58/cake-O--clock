@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     });
 
     useEffect(() => {
-        // Load from localStorage
+        
         const storedAuthState = localStorage.getItem('authState');
         if (storedAuthState) {
             setAuthState(JSON.parse(storedAuthState));
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        // Save to localStorage
+        
         localStorage.setItem('authState', JSON.stringify(authState));
     }, [authState]);
 
