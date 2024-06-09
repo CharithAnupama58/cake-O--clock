@@ -332,7 +332,7 @@ const CancelOrders = () => {
                         <div className="w-full max-h-96 overflow-y-auto">
                             {renderTable()}
                         </div>
-                        <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6' onClick={handleDownload}>Download Report</button>
+                        {/* <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6' onClick={handleDownload}>Download Report</button> */}
                 </div>
         </div>
     );

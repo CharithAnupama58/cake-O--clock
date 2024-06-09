@@ -30,6 +30,11 @@ const BranchTodayOrders = () => {
 
         } catch (error) {
             console.error('Error fetching item details:', error);
+            Swal.fire({
+                icon: 'info',
+                title: 'No Picture Orders Today',
+                text: 'There are currently no Picture orders to Release.',
+            });
         }
     };
         
@@ -42,6 +47,12 @@ const BranchTodayOrders = () => {
     
             } catch (error) {
                 console.error('Error fetching item details:', error);
+                Swal.fire({
+                    icon: 'info',
+                    title: 'No Picture Orders Today',
+                    text: 'There are currently no Picture orders to Release.',
+                });
+                setSelectedOption('Customize Orders')
             }
         };
         const updateStatus = async (orderId) => {

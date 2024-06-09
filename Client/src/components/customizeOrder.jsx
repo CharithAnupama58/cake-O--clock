@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import image4 from '../assets/images/image_4-removebg-preview 1.png'
 import Swal from 'sweetalert2';
 
 const CustomizeOrder = () => {
@@ -108,28 +109,112 @@ const CustomizeOrder = () => {
         (typeof item.status === 'string' && item.status.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
+    const addTemplate = (doc, title, pageNumber, totalPages) => {
+        const pageWidth = doc.internal.pageSize.width;
+        const pageHeight = doc.internal.pageSize.height;
+
+        
+        const fontSize = 16;
+        doc.setFontSize(fontSize);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(0, 102, 204); 
+
+      
+        const textWidth = doc.getStringUnitWidth(title) * fontSize / doc.internal.scaleFactor;
+        const xPos = (pageWidth - textWidth) / 2;
+        const yPos = 10; 
+        doc.text(title, xPos, yPos);
+
+     
+        const logoWidth = 30;
+        const logoHeight = 30;
+        const logoXPos = (pageWidth - logoWidth) / 2;
+        const logoYPos = yPos + 10; 
+        doc.addImage(image4, 'PNG', logoXPos, logoYPos, logoWidth, logoHeight);
+
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(0, 0, 0); 
+        const footerText = `Page ${pageNumber} of ${totalPages}`;
+        const footerYPos = pageHeight - 10;
+        doc.text(footerText, pageWidth / 2, footerYPos, { align: 'center' });
+
+        doc.setDrawColor(0, 102, 204); 
+        doc.rect(5, 5, pageWidth - 10, pageHeight - 10);
+    };
+
     const handleDownload = () => {
-        let table;
         let doc;
+        let table;
+        const title = 'Cake O Clock(pvt) Ltd Customize Orders';
+
         switch (selectedOption) {
             case "All Orders":
-                table = document.getElementById('stockTable');
                 doc = new jsPDF();
-                doc.autoTable({ html: table });
-                doc.save('table.pdf');
+                table = document.getElementById('stockTable');
+                doc.autoTable({
+                    html: table,
+                    startY: 60, // Start after the header and logo
+                    didDrawPage: function (data) {
+                        
+                        const pageNumber = doc.internal.getNumberOfPages();
+                        const totalPages = doc.internal.getNumberOfPages();
+
+                      
+                        addTemplate(doc, title, pageNumber, totalPages);
+                    },
+                    styles: {
+                        fillColor: [255, 255, 255], 
+                        textColor: [0, 0, 0], 
+                        lineColor: [0, 102, 204], 
+                        lineWidth: 0.1,
+                    },
+                    headStyles: {
+                        fillColor: [0, 102, 204],
+                        textColor: [255, 255, 255], 
+                        fontStyle: 'bold',
+                    },
+                    alternateRowStyles: {
+                        fillColor: [240, 240, 240], 
+                    },
+                });
+                doc.save('all_orders.pdf');
                 break;
             case "Orders To Prepare":
                 doc = new jsPDF();
                 table = document.getElementById('orderPrepareTable');
-                if (table) {
-                    doc.autoTable({ html: table });
-                    doc.save('table.pdf');
-                }
+                doc.autoTable({
+                    html: table,
+                    startY: 60, 
+                    didDrawPage: function (data) {
+                       
+                        const pageNumber = doc.internal.getNumberOfPages();
+                        const totalPages = doc.internal.getNumberOfPages();
+
+                    
+                        addTemplate(doc, title, pageNumber, totalPages);
+                    },
+                    styles: {
+                        fillColor: [255, 255, 255], 
+                        textColor: [0, 0, 0], 
+                        lineColor: [0, 102, 204], 
+                        lineWidth: 0.1,
+                    },
+                    headStyles: {
+                        fillColor: [0, 102, 204], 
+                        textColor: [255, 255, 255], 
+                        fontStyle: 'bold',
+                    },
+                    alternateRowStyles: {
+                        fillColor: [240, 240, 240],
+                    },
+                });
+                doc.save('orders_to_prepare.pdf');
                 break;
             default:
                 break;
         }
-    }
+    };
 
     const renderTable = () => {
         if (showAllOrders) {

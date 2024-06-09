@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
+import image4 from '../assets/images/image_4-removebg-preview 1.png';
 import 'jspdf-autotable';
 
 const ShowStock = () => {
@@ -26,30 +27,81 @@ const ShowStock = () => {
 
     const formatDateString = (dateString) => {
         const date = new Date(dateString);
-        return date.toLocaleDateString(); // Formats the date as per the user's locale
+        return date.toLocaleDateString(); 
     };
 
-    const handleDownload = () => {
-        const doc = new jsPDF();
-        const headingText = 'Cake O Clock(pvt) Ltd Stock Report';
-        const fontSize = 16;
-        const textWidth = doc.getStringUnitWidth(headingText) * fontSize / doc.internal.scaleFactor;
+    const addTemplate = (doc, title, pageNumber, totalPages) => {
         const pageWidth = doc.internal.pageSize.width;
-        const xPos = (pageWidth - textWidth) / 2;
-        const yPos = 10; // Adjust the y-position of the heading
-
+        const pageHeight = doc.internal.pageSize.height;
+    
+       
+        const fontSize = 16;
         doc.setFontSize(fontSize);
         doc.setFont('helvetica', 'bold');
-        doc.text(headingText, xPos, yPos);
-
-        const spaceHeight = 10;
-        const tableYPos = yPos + fontSize + spaceHeight;
-
-        const table = document.getElementById('stockTable');
-        doc.autoTable({ html: table, startY: tableYPos });
-
-        doc.save('table.pdf');
+        doc.setTextColor(0, 102, 204); 
+    
+        
+        const textWidth = doc.getStringUnitWidth(title) * fontSize / doc.internal.scaleFactor;
+        const xPos = (pageWidth - textWidth) / 2;
+        const yPos = 10; 
+        doc.text(title, xPos, yPos);
+    
+       
+        const logoWidth = 30;
+        const logoHeight = 30;
+        const logoXPos = (pageWidth - logoWidth) / 2;
+        const logoYPos = yPos + 10; 
+        doc.addImage(image4, 'PNG', logoXPos, logoYPos, logoWidth, logoHeight);
+    
+        
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(0, 0, 0); 
+        const footerText = `Page ${pageNumber} of ${totalPages}`;
+        const footerYPos = pageHeight - 10;
+        doc.text(footerText, pageWidth / 2, footerYPos, { align: 'center' });
+    
+        
+        doc.setDrawColor(0, 102, 204); 
+        doc.rect(5, 5, pageWidth - 10, pageHeight - 10);
     };
+    
+    const handleDownload = () => {
+        const doc = new jsPDF();
+        const title = 'Cake O Clock(pvt) Ltd Stock Report';
+    
+        
+        const table = document.getElementById('stockTable');
+        doc.autoTable({
+            html: table,
+            startY: 60, 
+            didDrawPage: function (data) {
+                const pageNumber = doc.internal.getNumberOfPages();
+                const totalPages = doc.internal.getNumberOfPages();
+    
+                addTemplate(doc, title, pageNumber, totalPages);
+            },
+            styles: {
+                fillColor: [255, 255, 255],
+                textColor: [0, 0, 0], 
+                lineColor: [0, 102, 204], 
+                lineWidth: 0.1,
+            },
+            headStyles: {
+                fillColor: [0, 102, 204],
+                textColor: [255, 255, 255],
+                fontStyle: 'bold',
+            },
+            alternateRowStyles: {
+                fillColor: [240, 240, 240], 
+            },
+        });
+    
+        doc.save('stock_report.pdf');
+    };
+    
+    
+    
 
     const filteredItems = items.filter(item =>
         (typeof item.itemId === 'string' && item.itemId.toLowerCase().includes(searchQuery.toLowerCase())) ||

@@ -42,7 +42,11 @@ const TemporaryOrders = () => {
             });
 
             if (response.status === 200) {
-                alert('Feedback submitted successfully');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Picture Order Placed successfully',
+                });
                 handleAllTempOrders();
                 // navigate(`/CustomizeCake2/${cakeId}/${additionalText}`);
             } else {
@@ -64,7 +68,7 @@ const TemporaryOrders = () => {
             Swal.fire({
                 icon: 'success',
                 title: 'Success!',
-                text: 'Picture Order Placed successfully',
+                text: 'Temporary Order Deleted successfully',
             });
             
             handleAllTempOrders();

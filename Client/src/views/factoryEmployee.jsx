@@ -110,40 +110,38 @@ const FactoryEmployee = () => {
                     </div>
     
                     <div className='flex flex-col w-72 justify-center items-center'>
-                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`} >
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-3 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('customizeCakeOrder')} > 
-                                <img src={image8} className='w-8 h-8' alt='Icon'></img>
-                                <h1 className='font-bold text-xl'>Customize Cake Order</h1>   
+                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4 rounded-xl hover:bg-gray-300`}>
+                            <div className='flex w-56 h-12 items-center justify-around mb-3 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('customizeCakeOrder')}>
+                                <img src={image8} className='w-8 h-8' alt='Icon' />
+                                <h1 className='font-bold text-xl'>Customize Cake Order</h1>
                             </div>
                         </button>
-                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl `}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('pictureUploadingCakeOrder')}> 
-                                <img src={image12} className='w-8 h-8' alt='Icon'></img>
-                                <h1 className='font-bold text-xl'>Picture Uploading</h1>   
+                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4 rounded-xl hover:bg-gray-300`}>
+                            <div className='flex w-56 h-12 items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('pictureUploadingCakeOrder')}>
+                                <img src={image12} className='w-8 h-8' alt='Icon' />
+                                <h1 className='font-bold text-xl'>Picture Uploading</h1>
                             </div>
                         </button>
-                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('temporaryOrders')}> 
-                                <img src={image14} className='w-8 h-8' alt='Icon'></img>
-                                <h1 className='font-bold text-xl'>Temporary Orders</h1>   
+                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4 rounded-xl hover:bg-gray-300`}>
+                            <div className='flex w-56 h-12 items-center justify-around border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('temporaryOrders')}>
+                                <img src={image14} className='w-8 h-8' alt='Icon' />
+                                <h1 className='font-bold text-xl'>Temporary Orders</h1>
                             </div>
                         </button>
-                    
-                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('todaysOrder')}> 
-                                <img src={image11} className='w-8 h-8' alt='Icon'></img>
-                                <h1 className='font-bold text-xl'>Today's Orders</h1>   
+                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4 rounded-xl hover:bg-gray-300`}>
+                            <div className='flex w-56 h-12 items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('todaysOrder')}>
+                                <img src={image11} className='w-8 h-8' alt='Icon' />
+                                <h1 className='font-bold text-xl'>Today's Orders</h1>
                             </div>
                         </button>
-                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl `} >
-                            <div className='flex w-56 h-12 bg-white items-center justify-around border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('cancelOrder')}> 
-                                <img src={image13} className='w-8 h-8' alt='Icon'></img>
-                                <h1 className='font-bold text-xl'>Cancel Order</h1>   
+                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4 rounded-xl hover:bg-gray-300`}>
+                            <div className='flex w-56 h-12 items-center justify-around border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('cancelOrder')}>
+                                <img src={image13} className='w-8 h-8' alt='Icon' />
+                                <h1 className='font-bold text-xl'>Cancel Order</h1>
                             </div>
                         </button>
-                        
                     </div>
-                    <div className='flex w-56 h-12 mb-3 bg-white items-center justify-around border-2 border-black rounded-xl'> 
+                    <div className='flex w-56 h-12 mb-3 bg-white items-center justify-around border-2 border-black rounded-xl hover:bg-gray-300'>
                         <button className='font-bold text-2xl' onClick={handleLogout}>Logout</button>
                     </div>
                 </div>
