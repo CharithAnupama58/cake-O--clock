@@ -84,6 +84,23 @@ app.listen(3001, () => {
 //         }
 //     });
 // });
+
+app.get('/check-orders', (req, res) => {
+  const lastCheckedTime = req.query.lastCheckedTime;
+
+  if (!lastCheckedTime) {
+      return res.status(400).json({ error: 'lastCheckedTime is required' });
+  }
+
+  const query = 'SELECT * FROM orders WHERE orderDate > ?';
+  db.query(query, [lastCheckedTime], (err, results) => {
+      if (err) {
+          console.error('Error fetching new orders:', err);
+          return res.status(500).json({ error: 'Error fetching new orders' });
+      }
+      res.json(results);
+  });
+});
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './uploads');

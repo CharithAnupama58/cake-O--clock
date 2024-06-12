@@ -104,7 +104,16 @@ const ReleaseStock = () => {
     };
 
     const handleReleaseQtyChange = (event) => {
-        setReleaseQty(event.target.value);
+        const value = event.target.value;
+        if (value >= 0) {
+            setReleaseQty(value);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Quantity',
+                text: 'Release quantity cannot be negative.',
+            });
+        }
     };
 
     const handleAddStockSubmit = async (e) => {

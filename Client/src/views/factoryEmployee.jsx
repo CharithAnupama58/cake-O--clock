@@ -1,7 +1,6 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import image9 from '../assets/images/Vector (3).png';
 import { IoNotificationsOutline } from 'react-icons/io5';
-import image10 from '../assets/images/image 10.png';
 import image4 from '../assets/images/image_4-removebg-preview 1.png';
 import image8 from '../assets/images/image 8.png';
 import image12 from '../assets/images/image 9.png';
@@ -16,62 +15,45 @@ import CancelOrder from '../components/cancelOrder';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../Context/AuthProvider';
-import { useContext } from 'react';
-
 
 const FactoryEmployee = () => {
     const { authState } = useContext(AuthContext);
-    const { jobRole,firstName } = authState;
+    const { jobRole, firstName } = authState;
     const [dateTime, setDateTime] = useState(new Date());
     const [showLogoutPopup, setShowLogoutPopup] = useState(false);
     const navigate = useNavigate();
     const [selectedInterface, setSelectedInterface] = useState('customizeCakeOrder');
     const [newNotifications, setNewNotifications] = useState(0);
-
+    const [lastCheckedTime, setLastCheckedTime] = useState(new Date().toISOString());
 
     useEffect(() => {
         const interval = setInterval(() => {
             setDateTime(new Date());
-            // pollForNewOrders();
         }, 1000); 
-
- 
-        
         return () => clearInterval(interval);
-        
-    },);
+    }, []);
 
-    async function checkForNewOrders(lastCheckedTime) {
+    const checkForNewOrders = async () => {
         try {
-          const response = await axios.get('http://localhost:3001/check-orders', {
-            params: { lastCheckedTime }
-          });
-          return response.data;
+            const response = await axios.get('http://localhost:3001/check-orders', {
+                params: { lastCheckedTime }
+            });
+            const newOrders = response.data;
+            if (newOrders.length > 0) {
+                setNewNotifications(prevCount => prevCount + newOrders.length);
+                setLastCheckedTime(new Date().toISOString());
+            }
         } catch (error) {
-          console.error('Error checking for new orders:', error);
-          return [];
+            console.error('Error checking for new orders:', error);
         }
-      }
-
-      async function pollForNewOrders() {
-        let lastCheckedTime = new Date().toISOString();
-      
-        setInterval(async () => {
-          const newOrders = await checkForNewOrders(lastCheckedTime);
-          if (newOrders.length > 0) {
-            console.log('New orders received:', newOrders);
-            // Handle new orders, e.g., display notifications
-          }
-          lastCheckedTime = new Date().toISOString();
-        });
-      }
-  
+    };
 
     const handleLogout = () => {
         setShowLogoutPopup(true);
     };
+
     const handleNewNotification = () => {
-        setNewNotifications(prevCount => prevCount + 1);
+        checkForNewOrders();
     };
 
     const handleConfirmLogout = () => {
@@ -82,10 +64,10 @@ const FactoryEmployee = () => {
     const handleCancelLogout = () => {
         setShowLogoutPopup(false);
     };
+
     const handleInterfaceChange = (interfaceName) => {
         setSelectedInterface(interfaceName);
     };
-    
 
     return (
         <section className='flex flex-col h-screen'>
@@ -147,7 +129,7 @@ const FactoryEmployee = () => {
                 </div>
                 <div className="flex flex-col items-center text-black flex-grow">
                     {selectedInterface === 'customizeCakeOrder' && <CustomizeOrder />}
-                    {selectedInterface=== 'pictureUploadingCakeOrder' && <PictureOrder />}
+                    {selectedInterface === 'pictureUploadingCakeOrder' && <PictureOrder />}
                     {selectedInterface === 'temporaryOrders' && <TemporaryOrders />}
                     {selectedInterface === 'todaysOrder' && <TodayOrders />}
                     {selectedInterface === 'cancelOrder' && <CancelOrder />}

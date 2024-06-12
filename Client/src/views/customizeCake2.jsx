@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams,useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
@@ -24,6 +24,8 @@ const CustomizeCake = () => {
     const [price, setPrice] = useState('');
     const [isFormValid, setIsFormValid] = useState(false);
     const [contactError, setContactError] = useState('');
+    const [branchName, setBranchName] = useState('');
+    const navigate = useNavigate();
 
     const sortedOptions = options.slice().sort((a, b) => a.branchName.localeCompare(b.branchName));
 
@@ -47,6 +49,8 @@ const CustomizeCake = () => {
 
     const handleSelectChange = (event) => {
         const selectedBranch = options.find(option => option.branchName === event.target.value);
+        setBranchName(selectedBranch.branchName);
+        console.log(selectedBranch);
         if (selectedBranch) {
             setSelectedOption(event.target.value);
             setBranchID(selectedBranch.branchID);
@@ -142,12 +146,14 @@ const CustomizeCake = () => {
             if (response.status === 200) {
                 setOrderId(response.data.orderId);
                 generatePDF(response.data.orderId);
+                
                 Swal.fire({
                     icon: 'success',
                     title: 'Order Placed Successfully',
                     text: `Your order ID is ${response.data.orderId}.`,
                 });
                 resetForm();
+                navigate('/')
             } else {
                 console.error('Failed to place order:', response.data.message);
             }
@@ -177,7 +183,7 @@ const CustomizeCake = () => {
             `Quantity: ${Quantity}`,
             `Pickup Date: ${PickupDate}`,
             `Cake ID: ${cakeId}`,
-            `Branch ID: ${branchID}`,
+            `Branch Name: ${branchName}`,
             `Size: ${selectedOption2}`,
             `Price: Rs. ${price}`
         ];
