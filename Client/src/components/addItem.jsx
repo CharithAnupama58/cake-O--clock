@@ -24,8 +24,14 @@ const AddItem = () => {
     };
 
     const handleSelectChange = (event) => {
-        setNewItemMeasureUnit(event.target.value);
-        validateForm(newItemName, event.target.value, newItemUnitQty);
+        const selectedUnit = event.target.value;
+        setNewItemMeasureUnit(selectedUnit);
+        if (selectedUnit === 'Kg') {
+            setNewItemUnitQty('1');
+        } else {
+            setNewItemUnitQty('');
+        }
+        validateForm(newItemName, selectedUnit, selectedUnit === 'Kg' ? '1' : newItemUnitQty);
     };
 
     const handleInputChanges = (event) => {
@@ -138,11 +144,12 @@ const AddItem = () => {
                         <input
                             type="number"
                             id="input4"
-                            maxLength="2"
+                            maxLength="4"
                             className={`w-full h-10 px-3 rounded border ${errors.newItemUnitQty ? 'border-red-500' : newItemUnitQty ? 'border-green-500' : 'border-gray-500'}`}
                             placeholder="Unit Quantity"
                             value={newItemUnitQty}
                             onChange={handleInputChanges}
+                            disabled={newItemMeasureUnit === 'Kg'}
                         />
                     </div>
 

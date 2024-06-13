@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams,useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { jsPDF } from 'jspdf';
 import Swal from 'sweetalert2';
-import image4 from '../assets/images/image_4-removebg-preview 1.png'
+import image4 from '../assets/images/image_4-removebg-preview 1.png';
 import arrowLeft from '../assets/images/arrowLeft.png';
 import radiobtn from '../assets/images/Group 127.png';
 import radiobtn1 from '../assets/images/Group 127 (1).png';
@@ -51,7 +51,6 @@ const CustomizeCake = () => {
     const handleSelectChange = (event) => {
         const selectedBranch = options.find(option => option.branchName === event.target.value);
         setBranchName(selectedBranch.branchName);
-        console.log(selectedBranch);
         if (selectedBranch) {
             setSelectedOption(event.target.value);
             setBranchID(selectedBranch.branchID);
@@ -84,7 +83,7 @@ const CustomizeCake = () => {
 
     const handleQuantityChange = (event) => {
         const quantity = event.target.value;
-        if (/^\d{0,2}$/.test(quantity)) {
+        if (/^\d{0,2}$/.test(quantity) && quantity >= 1 && quantity <= 10) {
             setQuantity(quantity);
         }
     };
@@ -92,7 +91,7 @@ const CustomizeCake = () => {
     const validateForm = () => {
         const isNameValid = Name.trim() !== '';
         const isContactValid = /^\d{10}$/.test(Contact);
-        const isQuantityValid = Quantity.trim() !== '' && /^\d{1,2}$/.test(Quantity);
+        const isQuantityValid = Quantity.trim() !== '' && /^\d{1,2}$/.test(Quantity) && Quantity >= 1 && Quantity <= 10;
         const isPickupDateValid = PickupDate.trim() !== '';
         const isBranchSelected = selectedOption.trim() !== '';
 
@@ -147,14 +146,14 @@ const CustomizeCake = () => {
             if (response.status === 200) {
                 setOrderId(response.data.orderId);
                 generatePDF(response.data.orderId);
-                
+
                 Swal.fire({
                     icon: 'success',
                     title: 'Order Placed Successfully',
                     text: `Your order ID is ${response.data.orderId}.`,
                 });
                 resetForm();
-                navigate('/')
+                navigate('/');
             } else {
                 console.error('Failed to place order:', response.data.message);
             }
@@ -165,38 +164,34 @@ const CustomizeCake = () => {
 
     const generatePDF = (orderID) => {
         const doc = new jsPDF();
-    
-        // Page border
+
         doc.setLineWidth(1);
         doc.rect(5, 5, doc.internal.pageSize.width - 10, doc.internal.pageSize.height - 10);
-    
+
         const pageWidth = doc.internal.pageSize.getWidth();
         const pageHeight = doc.internal.pageSize.getHeight();
         const title = 'Order Details';
         const titleX = (pageWidth - doc.getTextWidth(title)) / 2;
         const img = new Image();
         img.src = image4;
-    
+
         img.onload = () => {
-            const imgWidth = 50; 
-            const imgHeight = (img.height * imgWidth) / img.width; 
-            const imgX = (pageWidth - imgWidth) / 2; 
+            const imgWidth = 50;
+            const imgHeight = (img.height * imgWidth) / img.width;
+            const imgX = (pageWidth - imgWidth) / 2;
             const imgY = 40;
-    
-            // Add title
+
             doc.setFontSize(20);
             doc.setFont('helvetica', 'bold');
             doc.text(title, titleX, 20);
-    
-            // Add image
+
             doc.addImage(img, 'PNG', imgX, imgY, imgWidth, imgHeight);
-    
-            // Add order details
+
             doc.setFontSize(12);
             doc.setFont('helvetica', 'normal');
             const lineSpacing = 10;
             let yOffset = imgY + imgHeight + 20;
-    
+
             const orderDetails = [
                 `Order ID: ${orderID}`,
                 `Name: ${Name}`,
@@ -208,24 +203,18 @@ const CustomizeCake = () => {
                 `Size: ${selectedOption2}`,
                 `Price: Rs. ${price}`
             ];
-    
-            
+
             const maxTextWidth = Math.max(...orderDetails.map(detail => doc.getTextWidth(detail)));
             const detailsX = (pageWidth - maxTextWidth) / 2;
-    
-            
+
             orderDetails.forEach(detail => {
                 doc.text(detail, detailsX, yOffset);
                 yOffset += lineSpacing;
             });
-    
+
             doc.save('order_details.pdf');
         };
     };
-    
-    
-    
-    
 
     const resetForm = () => {
         setName('');

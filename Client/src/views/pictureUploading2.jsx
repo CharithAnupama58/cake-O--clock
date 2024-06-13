@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import arrowLeft from '../assets/images/arrowLeft.png';
 import radiobtn from '../assets/images/Group 127.png';
 import radiobtn1 from '../assets/images/Group 127 (1).png';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import image4 from '../assets/images/image_4-removebg-preview 1.png'
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { jsPDF } from 'jspdf';
@@ -18,6 +19,7 @@ export const PictureUploading2 = () => {
     const [additionalText, setAdditionalText] = useState('');
     const [branchID, setBranchID] = useState('');
     const [isFormValid, setIsFormValid] = useState(false);
+    const navigate = useNavigate();
 
     const fetchOptions = async () => {
         try {
@@ -72,7 +74,7 @@ export const PictureUploading2 = () => {
 
     const handleQuantityChange = (event) => {
         const quantity = event.target.value;
-        if (/^\d{0,2}$/.test(quantity)) {
+        if (/^\d{0,2}$/.test(quantity) && quantity >= 1 && quantity <= 10) {
             setQuantity(quantity);
         }
     };
@@ -84,7 +86,7 @@ export const PictureUploading2 = () => {
     const validateForm = () => {
         const isNameValid = Name.trim() !== '' && Name.length <= 50;
         const isContactValid = /^\d{10}$/.test(Contact);
-        const isQuantityValid = Quantity.trim() !== '' && /^\d{1,2}$/.test(Quantity);
+        const isQuantityValid = Quantity.trim() !== '' && /^\d{1,2}$/.test(Quantity) && Quantity >= 1 && Quantity <= 10;
         const isPickupDateValid = PickupDate.trim() !== '' && validatePickupDate(PickupDate);
         const isBranchSelected = selectedOption.trim() !== '';
 
@@ -136,6 +138,7 @@ export const PictureUploading2 = () => {
                 setPickupDate('');
                 setSelectedOption('');
                 generatePDF(response.data.orderId);
+                navigate('/')
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -155,17 +158,33 @@ export const PictureUploading2 = () => {
 
     const generatePDF = (orderID) => {
         const doc = new jsPDF();
-        
+
+        doc.setLineWidth(1);
+        doc.rect(5, 5, doc.internal.pageSize.width - 10, doc.internal.pageSize.height - 10);
+
         const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
         const title = 'Order Details';
         const titleX = (pageWidth - doc.getTextWidth(title)) / 2;
-        doc.setFontSize(20);
-        doc.text(title, titleX, 20);
-        
-        doc.setFontSize(12);
-        const leftMargin = 20;
-        let yOffset = 40;
-        const lineSpacing = 10;
+        const img = new Image();
+        img.src = image4;
+
+        img.onload = () => {
+            const imgWidth = 50;
+            const imgHeight = (img.height * imgWidth) / img.width;
+            const imgX = (pageWidth - imgWidth) / 2;
+            const imgY = 40;
+
+            doc.setFontSize(20);
+            doc.setFont('helvetica', 'bold');
+            doc.text(title, titleX, 20);
+
+            doc.addImage(img, 'PNG', imgX, imgY, imgWidth, imgHeight);
+
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            const lineSpacing = 10;
+            let yOffset = imgY + imgHeight + 20;
         
         const orderDetails = [
             `Order ID: ${orderID}`,
@@ -174,18 +193,20 @@ export const PictureUploading2 = () => {
             `Quantity: ${Quantity}`,
             `Pickup Date: ${PickupDate}`,
             `Branch: ${selectedOption}`,
-            
         ];
         
-        orderDetails.forEach(detail => {
-            doc.text(detail, leftMargin, yOffset);
-            yOffset += lineSpacing;
-        });
-        
-        doc.save('order_details.pdf');
-    };
+        const maxTextWidth = Math.max(...orderDetails.map(detail => doc.getTextWidth(detail)));
+            const detailsX = (pageWidth - maxTextWidth) / 2;
 
-    
+            orderDetails.forEach(detail => {
+                doc.text(detail, detailsX, yOffset);
+                yOffset += lineSpacing;
+            });
+
+            doc.save('order_details.pdf');
+        };
+        
+    };
 
     return (
         <div className='flex h-screen w-screen justify-between'>

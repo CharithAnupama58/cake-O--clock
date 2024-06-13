@@ -1,4 +1,4 @@
-import  { useState, useEffect,  useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import image9 from '../assets/images/Vector (3).png';
 import image10 from '../assets/images/image 10.png';
 import image4 from '../assets/images/image_4-removebg-preview 1.png';
@@ -16,10 +16,9 @@ import DeleteItem from '../components/deleteItem';
 import ExpioryDates from '../components/expioryDates';
 import { AuthContext } from '../Context/AuthProvider';
 
-
 const StockManagement = () => {
     const { authState } = useContext(AuthContext);
-    const { jobRole,firstName } = authState;
+    const { jobRole, firstName } = authState;
     const [dateTime, setDateTime] = useState(new Date());
     const [showLogoutPopup, setShowLogoutPopup] = useState(false);
     const navigate = useNavigate();
@@ -28,13 +27,10 @@ const StockManagement = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             setDateTime(new Date());
-        }, 1000); 
-
-
+        }, 1000);
 
         return () => clearInterval(interval);
-    },);
-    
+    }, []);
 
     const handleLogout = () => {
         setShowLogoutPopup(true);
@@ -48,11 +44,10 @@ const StockManagement = () => {
     const handleCancelLogout = () => {
         setShowLogoutPopup(false);
     };
+
     const handleInterfaceChange = (interfaceName) => {
         setSelectedInterface(interfaceName);
     };
-   
-
 
     return (
         <section className='flex flex-col h-screen'>
@@ -60,10 +55,10 @@ const StockManagement = () => {
                 <h1 className='ml-5 font-bold text-2xl'>{dateTime.toLocaleDateString()}</h1>
                 <h1 className='ml-5 font-bold text-2xl'>{dateTime.toLocaleTimeString()}</h1>
                 <div className='mr-10 flex items-center'>
-                    <img src={image9} alt='Icon' className='mr-2 w-10 h-10' /> 
-                    <div className='flex flex-col'> 
-                        <h1 className='font-bold text-1xl'>Mr.{firstName}</h1> 
-                        <h1 className='font-bold text-1xl'>{ jobRole}</h1> 
+                    <img src={image9} alt='Icon' className='mr-2 w-10 h-10' />
+                    <div className='flex flex-col'>
+                        <h1 className='font-bold text-1xl'>Mr.{firstName}</h1>
+                        <h1 className='font-bold text-1xl'>{jobRole}</h1>
                     </div>
                 </div>
             </div>
@@ -72,47 +67,30 @@ const StockManagement = () => {
                     <div className='flex-row h-44 w-44'>
                         <img src={image4} alt="Service Image" />
                     </div>
-    
+
                     <div className='flex flex-col w-72 justify-center items-center'>
-                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`} >
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('showStock')} > 
-                                <img src={image8} className='w-10 h-10' alt='Icon'></img>
-                                <h1 className='font-bold text-2xl'>Show Stock</h1>   
-                            </div>
-                        </button>
-                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl `}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('addStock')}> 
-                                <img src={image12} className='w-10 h-10' alt='Icon'></img>
-                                <h1 className='font-bold text-2xl'>Add Stock</h1>   
-                            </div>
-                        </button>
-                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`} >
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('releaseStock')}> 
-                                <img src={image10} className='w-10 h-10' alt='Icon'></img>
-                                <h1 className='font-bold text-2xl'>Release Stock</h1>   
-                            </div>
-                        </button>
-                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('addItem')}> 
-                                <img src={image11} className='w-10 h-10' alt='Icon'></img>
-                                <h1 className='font-bold text-2xl'>Add Item</h1>   
-                            </div>
-                        </button>
-                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl `} >
-                            <div className='flex w-56 h-12 bg-white items-center justify-around border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('deleteItem')}> 
-                                <img src={image13} className='w-10 h-10' alt='Icon'></img>
-                                <h1 className='font-bold text-2xl'>Delete Item</h1>   
-                            </div>
-                        </button>
-                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('expioryDates')}> 
-                                <img src={image14} className='w-10 h-10' alt='Icon'></img>
-                                <h1 className='font-bold text-2xl'>Expiory Dates</h1>   
-                            </div>
-                        </button>
+                        {[
+                            { name: 'Show Stock', icon: image8, interface: 'showStock' },
+                            { name: 'Add Stock', icon: image12, interface: 'addStock' },
+                            { name: 'Release Stock', icon: image10, interface: 'releaseStock' },
+                            { name: 'Add Item', icon: image11, interface: 'addItem' },
+                            { name: 'Delete Item', icon: image13, interface: 'deleteItem' },
+                            { name: 'Expiory Dates', icon: image14, interface: 'expioryDates' }
+                        ].map((button) => (
+                            <button
+                                key={button.name}
+                                className="w-56 h-12 mb-4 bg-white rounded-xl hover:bg-gray-200"
+                                onClick={() => handleInterfaceChange(button.interface)}
+                            >
+                                <div className='flex w-56 h-12 items-center justify-around border-2 border-black rounded-xl'>
+                                    <img src={button.icon} className='w-10 h-10' alt='Icon' />
+                                    <h1 className='font-bold text-2xl'>{button.name}</h1>
+                                </div>
+                            </button>
+                        ))}
                     </div>
-                    <div className='flex w-56 h-12 mb-3 bg-white items-center justify-around border-2 border-black rounded-xl'> 
-                        <button className='font-bold text-2xl' onClick={handleLogout}>Logout</button>
+                    <div className='flex w-56 h-12 mb-3 bg-white items-center justify-around border-2 border-black rounded-xl hover:bg-gray-200'>
+                        <button className='font-bold text-2xl ' onClick={handleLogout}>Logout</button>
                     </div>
                 </div>
                 <div className="flex flex-col items-center text-black flex-grow">
@@ -121,9 +99,8 @@ const StockManagement = () => {
                     {selectedInterface === 'releaseStock' && <ReleaseStock />}
                     {selectedInterface === 'addItem' && <AddItem />}
                     {selectedInterface === 'deleteItem' && <DeleteItem />}
-                    {selectedInterface === 'expioryDates' && <ExpioryDates/>}
+                    {selectedInterface === 'expioryDates' && <ExpioryDates />}
                 </div>
-                
             </div>
 
             {showLogoutPopup && (
@@ -138,7 +115,7 @@ const StockManagement = () => {
                 </div>
             )}
         </section>
-    );  
+    );
 };
 
 export default StockManagement;
