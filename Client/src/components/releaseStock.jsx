@@ -217,7 +217,7 @@ const ReleaseStock = () => {
                         <input type="number" id="input10" className={`w-full h-10 px-3 rounded border ${borderColor}`} placeholder="Release Quantity" value={releaseQty} onChange={handleReleaseQtyChange} />
                     </div>
                     
-                    <button type="submit" className='bg-custom-blue text-white font-bold rounded-xl mt-0 ml-20 py-1 px-6' disabled={!isFormValid}>
+                    <button type="submit" className='bg-custom-blue text-white font-bold rounded-xl mt-0 ml-20 py-1 px-6 hover:bg-gray-300' disabled={!isFormValid}>
                         Release Stock
                     </button>
                 </form>

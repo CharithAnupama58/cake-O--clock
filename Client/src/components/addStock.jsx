@@ -190,7 +190,7 @@ const AddStock = () => {
                     </div>
 
                     <button
-                        className='bg-custom-blue text-white font-bold rounded-xl mt-8 ml-20 py-1 px-6'
+                        className='bg-custom-blue text-white font-bold rounded-xl mt-8 ml-20 py-1 px-6 hover:bg-gray-300'
                         disabled={!isFormValid}
                     >
                         Add Stock

@@ -149,7 +149,7 @@ const ShowStock = () => {
                     </table>
                 </div>
 
-                <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6' disabled={filteredItems.length === 0} onClick={handleDownload}>Download Report</button>
+                <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6 hover:bg-gray-300' disabled={filteredItems.length === 0} onClick={handleDownload}>Download Report</button>
             </div>
 
         </div>

@@ -48,6 +48,7 @@ const TemporaryOrders = () => {
                     text: 'Picture Order Placed successfully',
                 });
                 handleAllTempOrders();
+                renderTable();
                 // navigate(`/CustomizeCake2/${cakeId}/${additionalText}`);
             } else {
                 console.error('Invalid username or password');
