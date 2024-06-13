@@ -71,13 +71,13 @@ const BranchEmployee = () => {
                     <div className='flex flex-col w-72 justify-center items-center mb-32'>
                        
                         <button className={`w-56 h-12 bg-white items-center  mb-6  rounded-xl`}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('todaysOrder')}> 
+                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl hover:bg-gray-400' onClick={() => handleInterfaceChange('todaysOrder')}> 
                                 <img src={image11} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>Today's Orders</h1>   
                             </div>
                         </button>
-                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`} >
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-3 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('releaseOrders')} > 
+                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl `} >
+                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-3 border-2 border-black rounded-xl hover:bg-gray-400' onClick={() => handleInterfaceChange('releaseOrders')} > 
                                 <img src={image8} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>Release Orders</h1>   
                             </div>
@@ -85,8 +85,8 @@ const BranchEmployee = () => {
                         
                         
                     </div>
-                    <div className='flex w-56 h-12 mb-3 bg-white items-center justify-around border-2 border-black rounded-xl'> 
-                        <button className='font-bold text-2xl' onClick={handleLogout}>Logout</button>
+                    <div className='flex w-56 h-12 mb-3 bg-white items-center justify-around border-2 border-black rounded-xl hover:bg-gray-400'> 
+                        <button className='font-bold text-2xl ' onClick={handleLogout}>Logout</button>
                     </div>
                 </div>
                 <div className="flex flex-col items-center text-black flex-grow">

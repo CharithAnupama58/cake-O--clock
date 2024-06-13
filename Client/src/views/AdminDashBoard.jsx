@@ -75,26 +75,26 @@ const AdminDashBoard = () => {
     
                     <div className='flex flex-col w-72 justify-center items-center'>
                         <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`} >
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-3 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('addUser')} > 
+                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-3 border-2 border-black rounded-xl hover:bg-gray-400' onClick={() => handleInterfaceChange('addUser')} > 
                                 <img src={image8} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>Add User</h1>   
                             </div>
                         </button>
-                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl `}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('allUsers')}> 
+                        <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl hover:bg-gray-300 `}>
+                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl hover:bg-gray-400' onClick={() => handleInterfaceChange('allUsers')}> 
                                 <img src={image12} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>All Users</h1>   
                             </div>
                         </button>
                         <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('addBranch')}> 
+                            <div className='flex w-56 h-12 bg-white items-center justify-around border-2 border-black rounded-xl hover:bg-gray-400' onClick={() => handleInterfaceChange('addBranch')}> 
                                 <img src={image14} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>Add Branch</h1>   
                             </div>
                         </button>
                     
                         <button className={`w-56 h-12 bg-white items-center justify-around mb-4  rounded-xl`}>
-                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl' onClick={() => handleInterfaceChange('addNewCake')}> 
+                            <div className='flex w-56 h-12 bg-white items-center justify-around mb-4 border-2 border-black rounded-xl hover:bg-gray-400' onClick={() => handleInterfaceChange('addNewCake')}> 
                                 <img src={image11} className='w-8 h-8' alt='Icon'></img>
                                 <h1 className='font-bold text-xl'>Add New Cake</h1>   
                             </div>
@@ -102,7 +102,7 @@ const AdminDashBoard = () => {
                        
                         
                     </div>
-                    <div className='flex w-56 h-12 mb-3 bg-white items-center justify-around border-2 border-black rounded-xl'> 
+                    <div className='flex w-56 h-12 mb-3 bg-white items-center justify-around border-2 border-black rounded-xl hover:bg-gray-400'> 
                         <button className='font-bold text-2xl' onClick={handleLogout}>Logout</button>
                     </div>
                 </div>

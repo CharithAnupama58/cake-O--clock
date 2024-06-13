@@ -68,7 +68,7 @@ const AddBranch = () => {
                         <label htmlFor="input2" className="block text-xl w-60 mr-4">Branch Name:</label>
                         <input type="text" id="input2" className="w-full h-10 px-3 rounded border border-black" placeholder="Branch Name" value={branchName} onChange={(e) => setBranchName(e.target.value)} maxLength={30} />
                     </div>
-                    <button className={`bg-custom-blue text-white font-bold rounded-xl mt-8 ml-20 py-1 px-6 ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={!isFormValid}>Add Branch</button>
+                    <button className={`bg-custom-blue text-white font-bold rounded-xl mt-8 ml-20 py-1 px-6 ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''} hover:bg-gray-300`} disabled={!isFormValid}>Add Branch</button>
                 </form>
             </div>
         </div>

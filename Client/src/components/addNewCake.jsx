@@ -117,7 +117,7 @@ const AddCake = () => {
                             <img src={imgUrl} alt="Cake" className="w-24 h-24 object-cover rounded-lg" />
                         </div>
                     )}
-                    <button className={`bg-custom-blue text-white font-bold rounded-xl mt-2 ml-20 px-6 ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={!isFormValid}>Add Cake</button>
+                    <button className={`bg-custom-blue text-white font-bold rounded-xl mt-2 ml-20 px-6 ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''} hover:bg-gray-300`} disabled={!isFormValid}>Add Cake</button>
                 </form>
             </div>
         </div>

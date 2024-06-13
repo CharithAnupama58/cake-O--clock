@@ -182,7 +182,6 @@ const AddUser = () => {
                         <label htmlFor="combo-box1" className="block text-xl w-60 mr-4">Job Role:</label>
                         <select id="combo-box1" className="w-full h-10 px-3 rounded border border-black" value={selectedOption1} onChange={handleSelectChange1}>
                             <option value="">Select an option...</option>
-                            <option>Admin</option>
                             <option>Stock Keeper</option>
                             <option>Factory Employee</option>
                             <option>Branch Employee</option>
@@ -197,7 +196,7 @@ const AddUser = () => {
                             ))}
                         </select>
                     </div>
-                    <button type="submit" className={`bg-custom-blue text-white font-bold rounded-xl mt-8 ml-20 py-1 px-6 ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={!isFormValid}>Add User</button>
+                    <button type="submit" className={`bg-custom-blue text-white font-bold rounded-xl mt-8 ml-20 py-1 px-6 ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''} hover:bg-gray-300`} disabled={!isFormValid}>Add User</button>
                 </form>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Swal from 'sweetalert2'; // Make sure to install sweetalert2
+import Swal from 'sweetalert2'; 
 
 const AddStock = () => {
     const [options, setOptions] = useState([]);
@@ -52,7 +52,7 @@ const AddStock = () => {
 
     const validateForm = (selectedOption, Quantity, ExpiryDate) => {
         const newErrors = {};
-        const quantityPattern = /^[1-9]\d{0,3}$/; // Up to 4 digits
+        const quantityPattern = /^[1-9]\d{0,3}$/; 
         const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
         if (!selectedOption) newErrors.selectedOption = true;
@@ -62,7 +62,7 @@ const AddStock = () => {
         } else {
             const selectedDate = new Date(ExpiryDate);
             const currentDate = new Date();
-            currentDate.setHours(0, 0, 0, 0); // Compare only the date part
+            currentDate.setHours(0, 0, 0, 0); 
             if (selectedDate < currentDate) {
                 newErrors.ExpiryDate = true;
                 Swal.fire({

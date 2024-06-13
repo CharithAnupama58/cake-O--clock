@@ -52,12 +52,26 @@ const Login = () => {
                     navigate('/AdminDashBoard');
                 }
             } else {
-                alert('Login failed');
-                setError('Invalid username or password');
+                Swal.fire({
+                    title: 'Invalid Login',
+                    text: 'Check your username and password',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                setUsername('');
+                setPassword('');
             }
         } catch (error) {
             console.error('Login failed:', error);
-            setError('Failed to login. Please try again later.');
+            Swal.fire({
+                title: 'Invalid Login',
+                text: 'Check your username and password',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            setUsername('');
+            setPassword('');
+            
         }
     };
 

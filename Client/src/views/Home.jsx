@@ -7,6 +7,7 @@ import image6 from '../assets/images/image 6.png'
 import image7 from '../assets/images/Vector (2).png'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Home = () => {
     const [name, setName] = useState('');
@@ -25,7 +26,11 @@ const Home = () => {
             });
 
             if (response.status === 200) {
-                alert('Feedback submitted successfully');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Stock added successfully',
+                });
                 setName('');
                 setEmail('');
                 setMessage('');

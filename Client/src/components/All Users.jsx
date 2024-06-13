@@ -125,7 +125,7 @@ const confirmDelete = (userId) => {
                         <h1 className='mt-10 font-bold text-4xl'>All Users</h1>
                         {renderTable()}
                         
-                        <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6' disabled={items.length === 0}  onClick={handleDownload}>Download Report</button>
+                        <button className='flex bg-custom-blue text-white font-bold rounded-xl mt-12 py-1 px-6 hover:bg-gray-300' disabled={items.length === 0}  onClick={handleDownload}>Download Report</button>
                 </div>
         </div>
     );
