@@ -52,7 +52,11 @@ const ReleaseOrders = () => {
                 });
     
                 if (response.status === 200) {
-                    alert('Feedback submitted successfully');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Order Completed successfully',
+                    });
                     handleAllOrders();
                 } else {
                     console.error('Invalid username or password');
@@ -70,7 +74,11 @@ const ReleaseOrders = () => {
                 });
     
                 if (response.status === 200) {
-                    alert('Feedback submitted successfully');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Order Completed successfully',
+                    });
                     handleOrdersToPrepare();
                 } else {
                     console.error('Invalid username or password');

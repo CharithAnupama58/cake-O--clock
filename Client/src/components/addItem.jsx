@@ -31,7 +31,7 @@ const AddItem = () => {
         } else {
             setNewItemUnitQty('');
         }
-        validateForm(newItemName, selectedUnit, selectedUnit === 'Kg' ? '1' : newItemUnitQty);
+        validateForm(newItemName, selectedUnit, selectedUnit === 'Kg' ? '1' : '');
     };
 
     const handleInputChanges = (event) => {
@@ -48,10 +48,14 @@ const AddItem = () => {
 
         if (!newItemName || !namePattern.test(newItemName)) newErrors.newItemName = true;
         if (!newItemMeasureUnit) newErrors.newItemMeasureUnit = true;
-        if (!newItemUnitQty || !quantityPattern.test(newItemUnitQty)) newErrors.newItemUnitQty = true;
+        if (newItemMeasureUnit === 'Kg' && newItemUnitQty !== '1') {
+            newErrors.newItemUnitQty = true;
+        } else if (newItemMeasureUnit !== 'Kg' && (!newItemUnitQty || !quantityPattern.test(newItemUnitQty))) {
+            newErrors.newItemUnitQty = true;
+        }
 
         setErrors(newErrors);
-        setIsFormValid(Object.keys(newErrors).length === 0 && newItemName && newItemMeasureUnit && newItemUnitQty);
+        setIsFormValid(Object.keys(newErrors).length === 0 && newItemName && newItemMeasureUnit && (newItemMeasureUnit === 'Kg' ? newItemUnitQty === '1' : newItemUnitQty));
     };
 
     const handleAddStockSubmit = async (e) => {

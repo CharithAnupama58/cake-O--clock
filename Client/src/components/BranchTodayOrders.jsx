@@ -63,7 +63,11 @@ const BranchTodayOrders = () => {
                 });
     
                 if (response.status === 200) {
-                    alert('Feedback submitted successfully');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Sms send successfully',
+                    });
                     handleAllOrders();
                 } else {
                     console.error('Invalid username or password');
@@ -81,7 +85,11 @@ const BranchTodayOrders = () => {
                 });
     
                 if (response.status === 200) {
-                    alert('Feedback submitted successfully');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Sms send successfully',
+                    });
                     handleOrdersToPrepare();
                 } else {
                     console.error('Invalid username or password');
