@@ -5,6 +5,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { jsPDF } from 'jspdf';
 import Swal from 'sweetalert2';
+import image4 from '../assets/images/image_4-removebg-preview 1.png'
 import arrowLeft from '../assets/images/arrowLeft.png';
 import radiobtn from '../assets/images/Group 127.png';
 import radiobtn1 from '../assets/images/Group 127 (1).png';
@@ -164,37 +165,67 @@ const CustomizeCake = () => {
 
     const generatePDF = (orderID) => {
         const doc = new jsPDF();
-
+    
+        // Page border
+        doc.setLineWidth(1);
+        doc.rect(5, 5, doc.internal.pageSize.width - 10, doc.internal.pageSize.height - 10);
+    
         const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
         const title = 'Order Details';
         const titleX = (pageWidth - doc.getTextWidth(title)) / 2;
-        doc.setFontSize(20);
-        doc.text(title, titleX, 20);
-
-        doc.setFontSize(12);
-        const leftMargin = 20;
-        let yOffset = 40;
-        const lineSpacing = 10;
-
-        const orderDetails = [
-            `Order ID: ${orderID}`,
-            `Name: ${Name}`,
-            `Contact: ${Contact}`,
-            `Quantity: ${Quantity}`,
-            `Pickup Date: ${PickupDate}`,
-            `Cake ID: ${cakeId}`,
-            `Branch Name: ${branchName}`,
-            `Size: ${selectedOption2}`,
-            `Price: Rs. ${price}`
-        ];
-
-        orderDetails.forEach(detail => {
-            doc.text(detail, leftMargin, yOffset);
-            yOffset += lineSpacing;
-        });
-
-        doc.save('order_details.pdf');
+        const img = new Image();
+        img.src = image4;
+    
+        img.onload = () => {
+            const imgWidth = 50; 
+            const imgHeight = (img.height * imgWidth) / img.width; 
+            const imgX = (pageWidth - imgWidth) / 2; 
+            const imgY = 40;
+    
+            // Add title
+            doc.setFontSize(20);
+            doc.setFont('helvetica', 'bold');
+            doc.text(title, titleX, 20);
+    
+            // Add image
+            doc.addImage(img, 'PNG', imgX, imgY, imgWidth, imgHeight);
+    
+            // Add order details
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            const lineSpacing = 10;
+            let yOffset = imgY + imgHeight + 20;
+    
+            const orderDetails = [
+                `Order ID: ${orderID}`,
+                `Name: ${Name}`,
+                `Contact: ${Contact}`,
+                `Quantity: ${Quantity}`,
+                `Pickup Date: ${PickupDate}`,
+                `Cake ID: ${cakeId}`,
+                `Branch Name: ${branchName}`,
+                `Size: ${selectedOption2}`,
+                `Price: Rs. ${price}`
+            ];
+    
+            
+            const maxTextWidth = Math.max(...orderDetails.map(detail => doc.getTextWidth(detail)));
+            const detailsX = (pageWidth - maxTextWidth) / 2;
+    
+            
+            orderDetails.forEach(detail => {
+                doc.text(detail, detailsX, yOffset);
+                yOffset += lineSpacing;
+            });
+    
+            doc.save('order_details.pdf');
+        };
     };
+    
+    
+    
+    
 
     const resetForm = () => {
         setName('');
