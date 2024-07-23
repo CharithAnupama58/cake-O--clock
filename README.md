@@ -1,6 +1,10 @@
 # Cake O'Clock
 
+
+![1](https://github.com/user-attachments/assets/cb2abaad-b691-4f28-8ab4-55760e70b4dc)
+
 Cake O'Clock is a web application designed to simplify the process of ordering cakes online. This README provides an overview of the project, including the technologies used, setup instructions, and guidelines for contributing.
+
 
 ## Table of Contents
 
